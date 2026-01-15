@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Campanhas - Q4 2025</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -42,7 +43,7 @@
 
         .filters {
             display: flex;
-            gap: 20px;
+            gap: 12px;
             margin-bottom: 24px;
             flex-wrap: wrap;
         }
@@ -54,10 +55,11 @@
         }
 
         .filter-label {
-            color: #94a3b8;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
+            color: #cbd5e1;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .filter-btn {
@@ -116,7 +118,6 @@
             font-weight: 700;
             color: #38bdf8;
             margin-bottom: 4px;
-            transition: all 300ms ease;
         }
 
         .kpi-change {
@@ -126,7 +127,7 @@
 
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 20px;
             margin-bottom: 24px;
         }
@@ -136,171 +137,76 @@
             border: 1px solid #334155;
             border-radius: 8px;
             padding: 20px;
+            transition: all 200ms ease;
         }
 
-        .chart-title {
+        .chart-card:hover {
+            border-color: #38bdf8;
+            box-shadow: 0 8px 16px rgba(56, 189, 248, 0.1);
+        }
+
+        .chart-card h3 {
+            color: #38bdf8;
             font-size: 14px;
-            font-weight: 600;
-            color: #f1f5f9;
             margin-bottom: 16px;
             text-transform: uppercase;
+            font-weight: 600;
             letter-spacing: 0.5px;
         }
 
         .chart {
+            position: relative;
             height: 300px;
-            display: flex;
-            align-items: flex-end;
-            gap: 12px;
         }
 
-        .bar-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .bar {
-            width: 100%;
-            background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
-            border-radius: 4px 4px 0 0;
-            min-height: 4px;
-            transition: all 300ms ease;
-            cursor: pointer;
-        }
-
-        .bar:hover {
-            opacity: 0.8;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
-        }
-
-        .bar.email {
-            background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
-        }
-
-        .bar.whatsapp {
-            background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
-        }
-
-        .bar-label {
-            font-size: 11px;
-            color: #94a3b8;
-            text-align: center;
-            width: 100%;
-        }
-
-        .bar-value {
-            font-size: 12px;
-            font-weight: 600;
-            color: #38bdf8;
-            text-align: center;
-            transition: all 300ms ease;
-        }
-
-        .funnel {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .funnel-step {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .funnel-bar {
-            flex: 1;
-            height: 30px;
-            background: linear-gradient(90deg, #38bdf8 0%, #0284c7 100%);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            padding: 0 12px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #0f172a;
-            transition: all 300ms ease;
-        }
-
-        .funnel-label {
-            width: 80px;
-            font-size: 12px;
-            color: #cbd5e1;
-            font-weight: 500;
-        }
-
-        .table-container {
+        .table-card {
             background: rgba(30, 41, 59, 0.8);
             border: 1px solid #334155;
             border-radius: 8px;
-            overflow: hidden;
+            padding: 20px;
+            overflow-x: auto;
         }
 
-        .table-header {
-            padding: 16px 20px;
+        .table-card h3 {
+            color: #38bdf8;
             font-size: 14px;
-            font-weight: 600;
+            margin-bottom: 16px;
             text-transform: uppercase;
-            color: #f1f5f9;
+            font-weight: 600;
             letter-spacing: 0.5px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        thead {
-            background: rgba(30, 41, 59, 0.5);
-            border-bottom: 1px solid #334155;
+            font-size: 13px;
         }
 
         th {
-            padding: 12px 16px;
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            padding: 12px;
             text-align: left;
-            font-size: 12px;
             font-weight: 600;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-right: 1px solid #1e293b;
-        }
-
-        th:last-child {
-            border-right: none;
+            border-bottom: 1px solid #334155;
         }
 
         td {
-            padding: 12px 16px;
-            border-bottom: 1px solid #334155;
-            font-size: 13px;
+            padding: 12px;
+            border-bottom: 1px solid #1e293b;
             color: #cbd5e1;
         }
 
-        tbody tr:hover {
+        tr:hover {
             background: rgba(56, 189, 248, 0.05);
-        }
-
-        .percentage-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background: rgba(56, 189, 248, 0.15);
-            color: #38bdf8;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
         }
 
         .channel-badge {
             display: inline-block;
             padding: 4px 8px;
             border-radius: 4px;
-            font-size: 11px;
             font-weight: 600;
-            text-transform: uppercase;
+            font-size: 11px;
         }
 
         .channel-email {
@@ -313,21 +219,19 @@
             color: #4ade80;
         }
 
-        .summary-row {
-            background: rgba(56, 189, 248, 0.1);
-            font-weight: 600;
+        .percentage-badge {
             color: #38bdf8;
+            font-weight: 600;
         }
 
-        .insights {
+        .insights-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 16px;
-            margin-bottom: 24px;
         }
 
         .insight-card {
-            background: rgba(56, 189, 248, 0.1);
+            background: rgba(56, 189, 248, 0.08);
             border-left: 3px solid #38bdf8;
             border-radius: 6px;
             padding: 16px;
@@ -408,134 +312,96 @@
 
         <div class="filters">
             <div class="filter-group">
-                <span class="filter-label">📅 Mês:</span>
+                <span class="filter-label">Mês:</span>
                 <button class="filter-btn active" data-filter="month" data-value="all">Todos</button>
                 <button class="filter-btn" data-filter="month" data-value="October">Outubro</button>
                 <button class="filter-btn" data-filter="month" data-value="November">Novembro</button>
                 <button class="filter-btn" data-filter="month" data-value="December">Dezembro</button>
             </div>
+
             <div class="filter-group">
-                <span class="filter-label">📞 Canal:</span>
+                <span class="filter-label">Canal:</span>
                 <button class="filter-btn active" data-filter="channel" data-value="all">Todos</button>
-                <button class="filter-btn" data-filter="channel" data-value="email">📧 Email</button>
-                <button class="filter-btn" data-filter="channel" data-value="whatsapp">💬 WhatsApp</button>
+                <button class="filter-btn" data-filter="channel" data-value="Email">Email</button>
+                <button class="filter-btn" data-filter="channel" data-value="WhatsApp">WhatsApp</button>
             </div>
         </div>
 
-        <div class="kpi-grid" id="kpiContainer">
+        <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-label">Total Planejado</div>
-                <div class="kpi-value" id="kpiPlanned">79,986</div>
-                <div class="kpi-change">Contatos-alvo</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Total Enviado</div>
-                <div class="kpi-value" id="kpiSent">76,330</div>
-                <div class="kpi-change" id="kpiSentPct">95.4% do planejado</div>
+                <div class="kpi-value" id="kpi-planejado">0</div>
+                <div class="kpi-change">Mensagens planejadas</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Total Entregue</div>
-                <div class="kpi-value" id="kpiDelivered">63,115</div>
-                <div class="kpi-change" id="kpiDeliveredPct">82.6% do enviado</div>
+                <div class="kpi-value" id="kpi-entregue">0</div>
+                <div class="kpi-change">Mensagens entregues</div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-label">Total Lido</div>
-                <div class="kpi-value" id="kpiRead">18,192</div>
-                <div class="kpi-change" id="kpiReadPct">28.8% de engajamento</div>
+                <div class="kpi-label">Taxa Média Entrega</div>
+                <div class="kpi-value" id="kpi-taxa-entrega">0%</div>
+                <div class="kpi-change">Eficiência de entrega</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Taxa Média Leitura</div>
+                <div class="kpi-value" id="kpi-taxa-leitura">0%</div>
+                <div class="kpi-change">Engajamento</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Total Visitado</div>
-                <div class="kpi-value" id="kpiVisited">1,932</div>
-                <div class="kpi-change" id="kpiVisitedPct">3.1% de conversão</div>
+                <div class="kpi-value" id="kpi-visitado">0</div>
+                <div class="kpi-change">Cliques e visitas</div>
             </div>
-        </div>
-
-        <div class="insights">
-            <div class="insight-card">
-                <div class="insight-title">📈 Melhor Mês</div>
-                <div class="insight-value">Novembro</div>
-                <div class="insight-desc">46.99% de taxa de leitura</div>
-            </div>
-            <div class="insight-card">
-                <div class="insight-title">📧 Canal Dominante</div>
-                <div class="insight-value">Email</div>
-                <div class="insight-desc">Maior volume e entrega consistente</div>
-            </div>
-            <div class="insight-card">
-                <div class="insight-title">🎯 Taxa de Entrega Média</div>
-                <div class="insight-value">82.6%</div>
-                <div class="insight-desc">Todas as campanhas</div>
+            <div class="kpi-card">
+                <div class="kpi-label">Taxa Média Visita</div>
+                <div class="kpi-value" id="kpi-taxa-visita">0%</div>
+                <div class="kpi-change">Click-through rate</div>
             </div>
         </div>
 
         <div class="charts-grid">
             <div class="chart-card">
-                <div class="chart-title">📊 Campanhas por Mês</div>
-                <div class="chart" id="monthChart">
-                    <div class="bar-container">
-                        <div class="bar" id="barOctober" style="height: 95%;"></div>
-                        <div class="bar-label">Outubro</div>
-                        <div class="bar-value" id="valOctober">9.5K</div>
-                    </div>
-                    <div class="bar-container">
-                        <div class="bar" id="barNovember" style="height: 5%;"></div>
-                        <div class="bar-label">Novembro</div>
-                        <div class="bar-value" id="valNovember">4.2K</div>
-                    </div>
-                    <div class="bar-container">
-                        <div class="bar" id="barDecember" style="height: 100%;"></div>
-                        <div class="bar-label">Dezembro</div>
-                        <div class="bar-value" id="valDecember">66.3K</div>
-                    </div>
+                <h3>📈 Mensagens por Mês</h3>
+                <div class="chart">
+                    <canvas id="chartMeses"></canvas>
                 </div>
             </div>
-
             <div class="chart-card">
-                <div class="chart-title">📞 Distribuição por Canal</div>
-                <div class="chart" id="channelChart">
-                    <div class="bar-container">
-                        <div class="bar email" id="barEmail" style="height: 60%;"></div>
-                        <div class="bar-label">Email</div>
-                        <div class="bar-value" id="valEmail">58.2K</div>
-                    </div>
-                    <div class="bar-container">
-                        <div class="bar whatsapp" id="barWhatsapp" style="height: 40%;"></div>
-                        <div class="bar-label">WhatsApp</div>
-                        <div class="bar-value" id="valWhatsapp">18.1K</div>
-                    </div>
+                <h3>📡 Desempenho por Canal</h3>
+                <div class="chart">
+                    <canvas id="chartCanais"></canvas>
                 </div>
             </div>
-
             <div class="chart-card">
-                <div class="chart-title">🎯 Funil de Conversão</div>
-                <div class="funnel">
-                    <div class="funnel-step">
-                        <div class="funnel-label">Planejado</div>
-                        <div class="funnel-bar" id="funnelPlanned" style="width: 100%;">79,986 (100%)</div>
-                    </div>
-                    <div class="funnel-step">
-                        <div class="funnel-label">Enviado</div>
-                        <div class="funnel-bar" id="funnelSent" style="width: 95.4%;">76,330 (95.4%)</div>
-                    </div>
-                    <div class="funnel-step">
-                        <div class="funnel-label">Entregue</div>
-                        <div class="funnel-bar" id="funnelDelivered" style="width: 78.9%;">63,115 (78.9%)</div>
-                    </div>
-                    <div class="funnel-step">
-                        <div class="funnel-label">Lido</div>
-                        <div class="funnel-bar" id="funnelRead" style="width: 22.7%;">18,192 (22.7%)</div>
-                    </div>
-                    <div class="funnel-step">
-                        <div class="funnel-label">Visitado</div>
-                        <div class="funnel-bar" id="funnelVisited" style="width: 2.4%;">1,932 (2.4%)</div>
-                    </div>
+                <h3>📊 Taxa de Entrega por Mês</h3>
+                <div class="chart">
+                    <canvas id="chartTaxaEntrega"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>👁️ Taxa de Leitura por Canal</h3>
+                <div class="chart">
+                    <canvas id="chartTaxaLeitura"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>🔗 Visitantes por Mês</h3>
+                <div class="chart">
+                    <canvas id="chartVisitas"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>💰 Funnel de Conversão</h3>
+                <div class="chart">
+                    <canvas id="chartFunnel"></canvas>
                 </div>
             </div>
         </div>
 
-        <div class="table-container">
-            <div class="table-header">Desempenho por Mês e Canal</div>
-            <table id="dataTable">
+        <div class="table-card">
+            <h3>📋 Dados Detalhados</h3>
+            <table>
                 <thead>
                     <tr>
                         <th>Mês</th>
@@ -555,230 +421,312 @@
             </table>
         </div>
 
-        <div style="margin-top: 24px; padding: 16px; background: rgba(56, 189, 248, 0.1); border-radius: 8px; border-left: 3px solid #38bdf8;">
-            <p style="font-size: 13px; color: #cbd5e1; margin-bottom: 8px;">
-                <strong style="color: #38bdf8;">💡 Insights Principais:</strong>
-            </p>
-            <ul style="font-size: 13px; color: #cbd5e1; margin-left: 20px; line-height: 1.6;">
-                <li><strong>Desempenho por Mês:</strong> Novembro teve a melhor taxa de leitura (47%), enquanto dezembro teve o maior volume (66.3K planejados).</li>
-                <li><strong>Performance de Canais:</strong> Email apresenta melhor taxa de entrega (85.6% em dezembro), mas WhatsApp tem melhor engajamento de leitura (48.6% em novembro).</li>
-                <li><strong>Funil de Conversão:</strong> Taxa de entrega (82.6%) é forte, porém apenas 28.8% leem, indicando oportunidade de otimização de conteúdo.</li>
-                <li><strong>Conversão Final:</strong> 3.1% de visitação sugere necessidade de melhorar chamadas para ação (CTA).</li>
-            </ul>
+        <div class="insights-grid" style="margin-top: 24px;">
+            <div class="insight-card">
+                <div class="insight-title">💡 Melhor Performance</div>
+                <div class="insight-value" id="insight-best">-</div>
+                <div class="insight-desc">Canal com maior taxa de entrega</div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-title">📌 Pico de Volume</div>
+                <div class="insight-value" id="insight-peak">-</div>
+                <div class="insight-desc">Período com maior envio</div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-title">🎯 Engajamento</div>
+                <div class="insight-value" id="insight-engagement">-</div>
+                <div class="insight-desc">Média de leitura dos filtros</div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Dados das campanhas
-        const campaignData = [
-            { month: 'October', channel: 'email', planned: 2614, sent: 2533, delivered: 1985, read: 707, visited: 40 },
-            { month: 'October', channel: 'whatsapp', planned: 6848, sent: 6267, delivered: 4615, read: 1885, visited: 138 },
-            { month: 'November', channel: 'email', planned: 1064, sent: 1029, delivered: 773, read: 319, visited: 40 },
-            { month: 'November', channel: 'whatsapp', planned: 3142, sent: 3083, delivered: 2683, read: 1305, visited: 40 },
-            { month: 'December', channel: 'email', planned: 54640, sent: 52856, delivered: 45264, read: 12166, visited: 1554 },
-            { month: 'December', channel: 'whatsapp', planned: 11678, sent: 10562, delivered: 7758, read: 1810, visited: 120 }
+        // Dados completos
+        const allData = [
+            { month: 'October', channel: 'Email', planejado: 2614, enviado: 2533, entregue: 1985, lido: 707, visitado: 40 },
+            { month: 'October', channel: 'WhatsApp', planejado: 6848, enviado: 6267, entregue: 4615, lido: 1885, visitado: 138 },
+            { month: 'November', channel: 'Email', planejado: 1064, enviado: 1029, entregue: 773, lido: 319, visitado: 40 },
+            { month: 'November', channel: 'WhatsApp', planejado: 3142, enviado: 3083, entregue: 2683, lido: 1305, visitado: 40 },
+            { month: 'December', channel: 'Email', planejado: 54640, enviado: 52856, entregue: 45264, lido: 12166, visitado: 1554 },
+            { month: 'December', channel: 'WhatsApp', planejado: 11678, enviado: 10562, entregue: 7758, lido: 1810, visitado: 120 }
         ];
 
-        let filters = { month: 'all', channel: 'all' };
+        let currentFilter = { month: 'all', channel: 'all' };
+        let charts = {};
 
-        // Calcula totais por mês e canal
-        function calculateChartData() {
-            const monthTotals = {};
-            const channelTotals = { email: 0, whatsapp: 0 };
-
-            campaignData.forEach(row => {
-                const monthMatch = filters.month === 'all' || row.month === filters.month;
-                const channelMatch = filters.channel === 'all' || row.channel === filters.channel;
-
-                if (monthMatch && channelMatch) {
-                    monthTotals[row.month] = (monthTotals[row.month] || 0) + row.planned;
-                    channelTotals[row.channel] += row.planned;
-                }
+        // Função para filtrar dados
+        function getFilteredData() {
+            return allData.filter(item => {
+                const monthMatch = currentFilter.month === 'all' || item.month === currentFilter.month;
+                const channelMatch = currentFilter.channel === 'all' || item.channel === currentFilter.channel;
+                return monthMatch && channelMatch;
             });
+        }
 
-            return { monthTotals, channelTotals };
+        // Setup de event listeners para filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filterType = this.getAttribute('data-filter');
+                const filterValue = this.getAttribute('data-value');
+                
+                // Remove active de todos os botões do mesmo grupo
+                document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach(b => {
+                    b.classList.remove('active');
+                });
+                
+                // Adiciona active ao clicado
+                this.classList.add('active');
+                
+                // Atualiza filtro
+                if (filterType === 'month') {
+                    currentFilter.month = filterValue;
+                } else if (filterType === 'channel') {
+                    currentFilter.channel = filterValue;
+                }
+                
+                // Atualiza dashboard
+                updateDashboard();
+            });
+        });
+
+        // Atualizar KPIs
+        function updateKPIs() {
+            const filtered = getFilteredData();
+            
+            const planejado = filtered.reduce((sum, item) => sum + item.planejado, 0);
+            const enviado = filtered.reduce((sum, item) => sum + item.enviado, 0);
+            const entregue = filtered.reduce((sum, item) => sum + item.entregue, 0);
+            const lido = filtered.reduce((sum, item) => sum + item.lido, 0);
+            const visitado = filtered.reduce((sum, item) => sum + item.visitado, 0);
+
+            const taxaEntrega = enviado > 0 ? ((entregue / enviado) * 100).toFixed(1) : 0;
+            const taxaLeitura = entregue > 0 ? ((lido / entregue) * 100).toFixed(1) : 0;
+            const taxaVisita = lido > 0 ? ((visitado / lido) * 100).toFixed(1) : 0;
+
+            document.getElementById('kpi-planejado').textContent = planejado.toLocaleString('pt-BR');
+            document.getElementById('kpi-entregue').textContent = entregue.toLocaleString('pt-BR');
+            document.getElementById('kpi-taxa-entrega').textContent = taxaEntrega + '%';
+            document.getElementById('kpi-taxa-leitura').textContent = taxaLeitura + '%';
+            document.getElementById('kpi-visitado').textContent = visitado.toLocaleString('pt-BR');
+            document.getElementById('kpi-taxa-visita').textContent = taxaVisita + '%';
+        }
+
+        // Atualizar tabela
+        function updateTable() {
+            const filtered = getFilteredData();
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            filtered.forEach(item => {
+                const taxaEntrega = ((item.entregue / item.enviado) * 100).toFixed(1);
+                const taxaLeitura = ((item.lido / item.entregue) * 100).toFixed(1);
+                const taxaVisita = ((item.visitado / item.lido) * 100).toFixed(1);
+
+                const monthNames = { 'October': 'Outubro', 'November': 'Novembro', 'December': 'Dezembro' };
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${monthNames[item.month]}</td>
+                    <td><span class="channel-badge channel-${item.channel.toLowerCase()}">${item.channel}</span></td>
+                    <td>${item.planejado.toLocaleString('pt-BR')}</td>
+                    <td>${item.enviado.toLocaleString('pt-BR')}</td>
+                    <td>${item.entregue.toLocaleString('pt-BR')}</td>
+                    <td><span class="percentage-badge">${taxaEntrega}%</span></td>
+                    <td>${item.lido.toLocaleString('pt-BR')}</td>
+                    <td><span class="percentage-badge">${taxaLeitura}%</span></td>
+                    <td>${item.visitado.toLocaleString('pt-BR')}</td>
+                    <td><span class="percentage-badge">${taxaVisita}%</span></td>
+                `;
+                tbody.appendChild(row);
+            });
         }
 
         // Atualizar gráficos
         function updateCharts() {
-            const { monthTotals, channelTotals } = calculateChartData();
-            
-            // Encontrar o máximo para proporção
-            const allMonths = [monthTotals['October'] || 0, monthTotals['November'] || 0, monthTotals['December'] || 0];
-            const maxMonth = Math.max(...allMonths, 1);
-            const maxChannel = Math.max(channelTotals.email, channelTotals.whatsapp, 1);
+            const filtered = getFilteredData();
+            const monthNames = { 'October': 'Outubro', 'November': 'Novembro', 'December': 'Dezembro' };
 
-            // Atualizar barras de mês
-            const octHeight = ((monthTotals['October'] || 0) / maxMonth) * 100;
-            const novHeight = ((monthTotals['November'] || 0) / maxMonth) * 100;
-            const decHeight = ((monthTotals['December'] || 0) / maxMonth) * 100;
+            // Gráfico por meses
+            const byMonth = {};
+            filtered.forEach(item => {
+                const monthName = monthNames[item.month];
+                if (!byMonth[monthName]) byMonth[monthName] = { entregue: 0, lido: 0, visitado: 0 };
+                byMonth[monthName].entregue += item.entregue;
+                byMonth[monthName].lido += item.lido;
+                byMonth[monthName].visitado += item.visitado;
+            });
 
-            document.getElementById('barOctober').style.height = octHeight + '%';
-            document.getElementById('barNovember').style.height = novHeight + '%';
-            document.getElementById('barDecember').style.height = decHeight + '%';
-
-            document.getElementById('valOctober').textContent = formatNumber(monthTotals['October'] || 0);
-            document.getElementById('valNovember').textContent = formatNumber(monthTotals['November'] || 0);
-            document.getElementById('valDecember').textContent = formatNumber(monthTotals['December'] || 0);
-
-            // Atualizar barras de canal
-            const emailHeight = (channelTotals.email / maxChannel) * 100;
-            const whatsappHeight = (channelTotals.whatsapp / maxChannel) * 100;
-
-            document.getElementById('barEmail').style.height = emailHeight + '%';
-            document.getElementById('barWhatsapp').style.height = whatsappHeight + '%';
-
-            document.getElementById('valEmail').textContent = formatNumber(channelTotals.email);
-            document.getElementById('valWhatsapp').textContent = formatNumber(channelTotals.whatsapp);
-        }
-
-        // Formatar números em K
-        function formatNumber(num) {
-            if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'K';
-            }
-            return num.toString();
-        }
-
-        // Popula tabela
-        function populateTable() {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-            let totals = { planned: 0, sent: 0, delivered: 0, read: 0, visited: 0 };
-
-            campaignData.forEach(row => {
-                const monthMatch = filters.month === 'all' || row.month === filters.month;
-                const channelMatch = filters.channel === 'all' || row.channel === filters.channel;
-
-                if (monthMatch && channelMatch) {
-                    const sentPct = ((row.sent / row.planned) * 100).toFixed(1);
-                    const deliveredPct = ((row.delivered / row.sent) * 100).toFixed(1);
-                    const readPct = ((row.read / row.delivered) * 100).toFixed(1);
-                    const visitedPct = ((row.visited / row.delivered) * 100).toFixed(1);
-
-                    const tr = document.createElement('tr');
-                    const monthName = row.month === 'October' ? 'Outubro' : row.month === 'November' ? 'Novembro' : 'Dezembro';
-                    const channelBadge = row.channel === 'email' 
-                        ? '<span class="channel-badge channel-email">📧 Email</span>'
-                        : '<span class="channel-badge channel-whatsapp">💬 WhatsApp</span>';
-
-                    tr.innerHTML = `
-                        <td>${monthName}</td>
-                        <td>${channelBadge}</td>
-                        <td>${row.planned.toLocaleString('pt-BR')}</td>
-                        <td>${row.sent.toLocaleString('pt-BR')}</td>
-                        <td>${row.delivered.toLocaleString('pt-BR')}</td>
-                        <td><span class="percentage-badge">${deliveredPct}%</span></td>
-                        <td>${row.read.toLocaleString('pt-BR')}</td>
-                        <td><span class="percentage-badge">${readPct}%</span></td>
-                        <td>${row.visited.toLocaleString('pt-BR')}</td>
-                        <td><span class="percentage-badge">${visitedPct}%</span></td>
-                    `;
-                    tbody.appendChild(tr);
-
-                    totals.planned += row.planned;
-                    totals.sent += row.sent;
-                    totals.delivered += row.delivered;
-                    totals.read += row.read;
-                    totals.visited += row.visited;
+            if (charts.chartMeses) charts.chartMeses.destroy();
+            const ctxMeses = document.getElementById('chartMeses').getContext('2d');
+            charts.chartMeses = new Chart(ctxMeses, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(byMonth),
+                    datasets: [
+                        { label: 'Entregues', data: Object.values(byMonth).map(d => d.entregue), borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)', tension: 0.4, fill: false },
+                        { label: 'Lidos', data: Object.values(byMonth).map(d => d.lido), borderColor: '#4ade80', backgroundColor: 'rgba(74, 222, 128, 0.1)', tension: 0.4, fill: false }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { labels: { color: '#cbd5e1' } } 
+                    }, 
+                    scales: { 
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, 
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } 
+                    } 
                 }
             });
 
-            // Adicionar linha de totais
-            if (totals.planned > 0) {
-                const totalRow = document.createElement('tr');
-                totalRow.className = 'summary-row';
-                const totalSentPct = ((totals.sent / totals.planned) * 100).toFixed(1);
-                const totalDeliveredPct = ((totals.delivered / totals.sent) * 100).toFixed(1);
-                const totalReadPct = ((totals.read / totals.delivered) * 100).toFixed(1);
-                const totalVisitedPct = ((totals.visited / totals.delivered) * 100).toFixed(1);
-
-                totalRow.innerHTML = `
-                    <td colspan="2">TOTAL FILTRADO</td>
-                    <td>${totals.planned.toLocaleString('pt-BR')}</td>
-                    <td>${totals.sent.toLocaleString('pt-BR')}</td>
-                    <td>${totals.delivered.toLocaleString('pt-BR')}</td>
-                    <td><span class="percentage-badge">${totalDeliveredPct}%</span></td>
-                    <td>${totals.read.toLocaleString('pt-BR')}</td>
-                    <td><span class="percentage-badge">${totalReadPct}%</span></td>
-                    <td>${totals.visited.toLocaleString('pt-BR')}</td>
-                    <td><span class="percentage-badge">${totalVisitedPct}%</span></td>
-                `;
-                tbody.appendChild(totalRow);
-            }
-
-            updateKPIs(totals);
-        }
-
-        // Atualizar KPIs
-        function updateKPIs(totals) {
-            document.getElementById('kpiPlanned').textContent = totals.planned.toLocaleString('pt-BR');
-            document.getElementById('kpiSent').textContent = totals.sent.toLocaleString('pt-BR');
-            document.getElementById('kpiDelivered').textContent = totals.delivered.toLocaleString('pt-BR');
-            document.getElementById('kpiRead').textContent = totals.read.toLocaleString('pt-BR');
-            document.getElementById('kpiVisited').textContent = totals.visited.toLocaleString('pt-BR');
-
-            const sentPct = totals.planned > 0 ? ((totals.sent / totals.planned) * 100).toFixed(1) : 0;
-            const deliveredPct = totals.sent > 0 ? ((totals.delivered / totals.sent) * 100).toFixed(1) : 0;
-            const readPct = totals.delivered > 0 ? ((totals.read / totals.delivered) * 100).toFixed(1) : 0;
-            const visitedPct = totals.delivered > 0 ? ((totals.visited / totals.delivered) * 100).toFixed(1) : 0;
-
-            document.getElementById('kpiSentPct').textContent = `${sentPct}% do planejado`;
-            document.getElementById('kpiDeliveredPct').textContent = `${deliveredPct}% do enviado`;
-            document.getElementById('kpiReadPct').textContent = `${readPct}% de engajamento`;
-            document.getElementById('kpiVisitedPct').textContent = `${visitedPct}% de conversão`;
-
-            // Atualizar funil
-            const totalPlanned = totals.planned || 1;
-            document.getElementById('funnelPlanned').style.width = '100%';
-            document.getElementById('funnelPlanned').textContent = `${totals.planned.toLocaleString('pt-BR')} (100%)`;
-            
-            const sentWidth = (sentPct);
-            document.getElementById('funnelSent').style.width = sentWidth + '%';
-            document.getElementById('funnelSent').textContent = `${totals.sent.toLocaleString('pt-BR')} (${sentPct}%)`;
-            
-            const delWidth = (sentPct * (deliveredPct / 100));
-            document.getElementById('funnelDelivered').style.width = delWidth + '%';
-            document.getElementById('funnelDelivered').textContent = `${totals.delivered.toLocaleString('pt-BR')} (${((totals.delivered/totals.planned)*100).toFixed(1)}%)`;
-            
-            const readWidth = (sentPct * (deliveredPct / 100) * (readPct / 100));
-            document.getElementById('funnelRead').style.width = readWidth + '%';
-            document.getElementById('funnelRead').textContent = `${totals.read.toLocaleString('pt-BR')} (${((totals.read/totals.planned)*100).toFixed(1)}%)`;
-            
-            const visWidth = (sentPct * (deliveredPct / 100) * (readPct / 100) * (visitedPct / 100));
-            document.getElementById('funnelVisited').style.width = visWidth + '%';
-            document.getElementById('funnelVisited').textContent = `${totals.visited.toLocaleString('pt-BR')} (${((totals.visited/totals.planned)*100).toFixed(1)}%)`;
-        }
-
-        // Configurar botões de filtro
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const filterType = this.dataset.filter;
-                const filterValue = this.dataset.value;
-
-                // Remover ativo do mesmo grupo
-                document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach(b => {
-                    b.classList.remove('active');
-                });
-
-                // Adicionar ativo ao clicado
-                this.classList.add('active');
-
-                // Atualizar filtro
-                filters[filterType] = filterValue;
-
-                // Recarregar tudo
-                populateTable();
-                updateCharts();
+            // Gráfico por canais
+            const byChannel = {};
+            filtered.forEach(item => {
+                if (!byChannel[item.channel]) byChannel[item.channel] = 0;
+                byChannel[item.channel] += item.entregue;
             });
-        });
 
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', () => {
-            populateTable();
+            if (charts.chartCanais) charts.chartCanais.destroy();
+            const ctxCanais = document.getElementById('chartCanais').getContext('2d');
+            charts.chartCanais = new Chart(ctxCanais, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(byChannel),
+                    datasets: [{ data: Object.values(byChannel), backgroundColor: ['#38bdf8', '#4ade80'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } } }
+            });
+
+            // Taxa de entrega por mês
+            const taxaByMonth = {};
+            filtered.forEach(item => {
+                const monthName = monthNames[item.month];
+                if (!taxaByMonth[monthName]) taxaByMonth[monthName] = { entregue: 0, enviado: 0 };
+                taxaByMonth[monthName].entregue += item.entregue;
+                taxaByMonth[monthName].enviado += item.enviado;
+            });
+
+            if (charts.chartTaxaEntrega) charts.chartTaxaEntrega.destroy();
+            const ctxTaxaEntrega = document.getElementById('chartTaxaEntrega').getContext('2d');
+            charts.chartTaxaEntrega = new Chart(ctxTaxaEntrega, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(taxaByMonth),
+                    datasets: [{ label: 'Taxa Entrega (%)', data: Object.values(taxaByMonth).map(d => ((d.entregue / d.enviado) * 100).toFixed(1)), backgroundColor: '#38bdf8' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } }, scales: { y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
+            });
+
+            // Taxa leitura por canal
+            const taxaLeituraByChannel = {};
+            filtered.forEach(item => {
+                if (!taxaLeituraByChannel[item.channel]) taxaLeituraByChannel[item.channel] = { lido: 0, entregue: 0 };
+                taxaLeituraByChannel[item.channel].lido += item.lido;
+                taxaLeituraByChannel[item.channel].entregue += item.entregue;
+            });
+
+            if (charts.chartTaxaLeitura) charts.chartTaxaLeitura.destroy();
+            const ctxTaxaLeitura = document.getElementById('chartTaxaLeitura').getContext('2d');
+            charts.chartTaxaLeitura = new Chart(ctxTaxaLeitura, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(taxaLeituraByChannel),
+                    datasets: [{ label: 'Taxa Leitura (%)', data: Object.values(taxaLeituraByChannel).map(d => ((d.lido / d.entregue) * 100).toFixed(1)), backgroundColor: '#4ade80' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } }, scales: { y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
+            });
+
+            // Visitantes por mês
+            if (charts.chartVisitas) charts.chartVisitas.destroy();
+            const ctxVisitas = document.getElementById('chartVisitas').getContext('2d');
+            charts.chartVisitas = new Chart(ctxVisitas, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(byMonth),
+                    datasets: [{ label: 'Visitados', data: Object.values(byMonth).map(d => d.visitado), borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', tension: 0.4, fill: true }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } }, scales: { y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
+            });
+
+            // Funnel de conversão
+            if (charts.chartFunnel) charts.chartFunnel.destroy();
+            const ctxFunnel = document.getElementById('chartFunnel').getContext('2d');
+            const totalEntregue = filtered.reduce((sum, item) => sum + item.entregue, 0);
+            const totalLido = filtered.reduce((sum, item) => sum + item.lido, 0);
+            const totalVisitado = filtered.reduce((sum, item) => sum + item.visitado, 0);
+
+            charts.chartFunnel = new Chart(ctxFunnel, {
+                type: 'bar',
+                data: {
+                    labels: ['Entregues', 'Lidos', 'Visitados'],
+                    datasets: [{ label: 'Volume', data: [totalEntregue, totalLido, totalVisitado], backgroundColor: ['#38bdf8', '#4ade80', '#f59e0b'] }]
+                },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } }, scales: { x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
+            });
+        }
+
+        // Atualizar insights
+        function updateInsights() {
+            const filtered = getFilteredData();
+            const monthNames = { 'October': 'Outubro', 'November': 'Novembro', 'December': 'Dezembro' };
+            
+            // Melhor performance
+            let bestChannel = '-';
+            let bestRate = 0;
+            const channelData = {};
+            filtered.forEach(item => {
+                if (!channelData[item.channel]) channelData[item.channel] = { entregue: 0, enviado: 0 };
+                channelData[item.channel].entregue += item.entregue;
+                channelData[item.channel].enviado += item.enviado;
+            });
+            Object.entries(channelData).forEach(([channel, data]) => {
+                const rate = (data.entregue / data.enviado) * 100;
+                if (rate > bestRate) {
+                    bestRate = rate;
+                    bestChannel = channel;
+                }
+            });
+
+            // Período com maior volume
+            const byMonth = {};
+            filtered.forEach(item => {
+                const monthName = monthNames[item.month];
+                if (!byMonth[monthName]) byMonth[monthName] = 0;
+                byMonth[monthName] += item.entregue;
+            });
+            let peakMonth = '-';
+            let peakValue = 0;
+            Object.entries(byMonth).forEach(([month, value]) => {
+                if (value > peakValue) {
+                    peakValue = value;
+                    peakMonth = month;
+                }
+            });
+
+            // Engajamento geral
+            const totalEntregue = filtered.reduce((sum, item) => sum + item.entregue, 0);
+            const totalLido = filtered.reduce((sum, item) => sum + item.lido, 0);
+            const avgEngagement = totalEntregue > 0 ? ((totalLido / totalEntregue) * 100).toFixed(1) : 0;
+
+            document.getElementById('insight-best').textContent = bestChannel ? `${bestChannel} (${bestRate.toFixed(1)}%)` : '-';
+            document.getElementById('insight-peak').textContent = peakMonth || '-';
+            document.getElementById('insight-engagement').textContent = avgEngagement + '%';
+        }
+
+        // Atualizar dashboard completo
+        function updateDashboard() {
+            updateKPIs();
+            updateTable();
             updateCharts();
+            updateInsights();
+        }
 
-            // Animação ao carregar
+        // Inicializar ao carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDashboard();
+
+            // Animação de entrada
             const cards = document.querySelectorAll('.kpi-card, .chart-card, .insight-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
@@ -793,3 +741,4 @@
     </script>
 </body>
 </html>
+
