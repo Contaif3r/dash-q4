@@ -3,35 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campaign Analytics Dashboard</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.10.3/Recharts.js"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/recharts@2.10.3/dist/Recharts.js"></script>
+    <title>Dashboard Campanhas - Q4 2025</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --secondary: #1f2937;
-            --accent: #06b6d4;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --border: #e5e7eb;
-            --text: #1f2937;
-            --text-light: #6b7280;
-            --bg: #f9fafb;
-            --bg-white: #ffffff;
-            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
-            --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -39,11 +13,11 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #f1f5f9;
         }
 
         .container {
@@ -51,970 +25,719 @@
             margin: 0 auto;
         }
 
-        /* Header */
-        .header {
-            background: var(--bg-white);
-            border-radius: var(--radius-lg);
-            padding: 30px;
+        header {
             margin-bottom: 30px;
-            box-shadow: var(--shadow-md);
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #38bdf8;
         }
 
-        .header p {
-            color: var(--text-light);
-            font-size: 1rem;
+        header p {
+            color: #cbd5e1;
+            font-size: 14px;
         }
 
-        /* Filters Section */
         .filters {
-            background: var(--bg-white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow-md);
-        }
-
-        .filters h3 {
-            font-size: 1.125rem;
-            margin-bottom: 20px;
-            color: var(--text);
-        }
-
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
         }
 
         .filter-group {
             display: flex;
-            flex-direction: column;
+            gap: 8px;
+            align-items: center;
         }
 
-        .filter-group label {
-            font-size: 0.875rem;
+        .filter-label {
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text);
+            color: #cbd5e1;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .filter-group select,
-        .filter-group input {
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
-            transition: var(--transition);
-            background: var(--bg-white);
-            color: var(--text);
-        }
-
-        .filter-group select:hover,
-        .filter-group input:hover {
-            border-color: var(--primary);
-        }
-
-        .filter-group select:focus,
-        .filter-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        /* Button */
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--radius-md);
-            font-weight: 600;
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #334155;
+            background: rgba(30, 41, 59, 0.8);
+            color: #f1f5f9;
+            border-radius: 6px;
             cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            font-size: 13px;
+            transition: all 150ms ease;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
+        .filter-btn:hover {
+            background: #334155;
+            border-color: #38bdf8;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            box-shadow: var(--shadow-lg);
+        .filter-btn.active {
+            background: #38bdf8;
+            color: #0f172a;
+            border-color: #38bdf8;
         }
 
-        .btn-secondary {
-            background: var(--secondary);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #111827;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 0.8rem;
-        }
-
-        /* KPI Cards */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .kpi-card {
-            background: var(--bg-white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-md);
-            transition: var(--transition);
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 200ms ease;
         }
 
         .kpi-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
+            border-color: #38bdf8;
+            box-shadow: 0 8px 16px rgba(56, 189, 248, 0.1);
         }
 
         .kpi-label {
-            font-size: 0.875rem;
-            color: var(--text-light);
-            font-weight: 500;
+            font-size: 12px;
             text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 600;
             letter-spacing: 0.5px;
-            margin-bottom: 12px;
         }
 
         .kpi-value {
-            font-size: 2.5rem;
+            font-size: 24px;
             font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 8px;
+            color: #38bdf8;
+            margin-bottom: 4px;
         }
 
         .kpi-change {
-            font-size: 0.875rem;
-            font-weight: 600;
+            font-size: 12px;
+            color: #94a3b8;
         }
 
-        .kpi-change.positive {
-            color: var(--success);
-        }
-
-        .kpi-change.negative {
-            color: var(--error);
-        }
-
-        /* Charts Grid */
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 1200px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
         }
 
         .chart-card {
-            background: var(--bg-white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-md);
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 200ms ease;
+        }
+
+        .chart-card:hover {
+            border-color: #38bdf8;
+            box-shadow: 0 8px 16px rgba(56, 189, 248, 0.1);
         }
 
         .chart-card h3 {
-            font-size: 1.125rem;
-            margin-bottom: 20px;
-            color: var(--text);
+            color: #38bdf8;
+            font-size: 14px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        .chart-container {
-            width: 100%;
+        .chart {
+            position: relative;
             height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        /* Table */
         .table-card {
-            background: var(--bg-white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-md);
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
             overflow-x: auto;
         }
 
         .table-card h3 {
-            font-size: 1.125rem;
-            margin-bottom: 20px;
-            color: var(--text);
+            color: #38bdf8;
+            font-size: 14px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        thead {
-            background: var(--bg);
-            border-bottom: 2px solid var(--border);
+            font-size: 13px;
         }
 
         th {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
             padding: 12px;
             text-align: left;
             font-weight: 600;
-            font-size: 0.875rem;
-            color: var(--text);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            border-bottom: 1px solid #334155;
         }
 
         td {
             padding: 12px;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
+            border-bottom: 1px solid #1e293b;
+            color: #cbd5e1;
         }
 
-        tbody tr {
-            transition: var(--transition);
+        tr:hover {
+            background: rgba(56, 189, 248, 0.05);
         }
 
-        tbody tr:hover {
-            background: var(--bg);
+        .channel-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 11px;
         }
 
-        /* Loading & Error */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 200px;
-            gap: 10px;
+        .channel-email {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
         }
 
-        .spinner {
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            animation: spin 1s linear infinite;
+        .channel-whatsapp {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .percentage-badge {
+            color: #38bdf8;
+            font-weight: 600;
         }
 
-        .error {
-            background: #fee2e2;
-            border: 1px solid #fecaca;
-            color: #991b1b;
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .insight-card {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 3px solid #38bdf8;
+            border-radius: 6px;
             padding: 16px;
-            border-radius: var(--radius-md);
-            margin-bottom: 20px;
         }
 
-        .success {
-            background: #d1fae5;
-            border: 1px solid #a7f3d0;
-            color: #065f46;
-            padding: 16px;
-            border-radius: var(--radius-md);
-            margin-bottom: 20px;
+        .insight-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #38bdf8;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
 
-        /* Export Buttons */
-        .export-section {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
+        .insight-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f1f5f9;
         }
 
-        /* Responsive */
+        .insight-desc {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.875rem;
-            }
-
-            .filter-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .kpi-grid {
-                grid-template-columns: 1fr;
-            }
-
             .charts-grid {
                 grid-template-columns: 1fr;
             }
 
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .chart {
+                height: 250px;
+            }
+
             table {
-                font-size: 0.75rem;
+                font-size: 12px;
             }
 
             th, td {
-                padding: 8px;
+                padding: 8px 12px;
             }
         }
 
-        /* Top Items Section */
-        .top-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+        @media (max-width: 480px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
 
-        .top-items-card {
-            background: var(--bg-white);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-md);
-        }
+            .chart {
+                height: 200px;
+            }
 
-        .top-items-card h3 {
-            font-size: 1.125rem;
-            margin-bottom: 20px;
-            color: var(--text);
-        }
+            .filters {
+                flex-direction: column;
+            }
 
-        .item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .item-row:last-child {
-            border-bottom: none;
-        }
-
-        .item-rank {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .rank-number {
-            background: var(--primary);
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.875rem;
-        }
-
-        .item-name {
-            font-weight: 500;
-            color: var(--text);
-            font-size: 0.9rem;
-        }
-
-        .item-value {
-            font-weight: 700;
-            color: var(--accent);
+            .filter-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>📊 Campaign Analytics Dashboard</h1>
-            <p>Análise em tempo real de campanhas de marketing farmacêutico</p>
+        <header>
+            <h1>📊 Dashboard de Campanhas Q4 2025</h1>
+            <p>Análise de desempenho de campanhas de outubro a dezembro - Natcofarma</p>
+        </header>
+
+        <div class="filters">
+            <div class="filter-group">
+                <span class="filter-label">Mês:</span>
+                <button class="filter-btn active" data-filter="month" data-value="all">Todos</button>
+                <button class="filter-btn" data-filter="month" data-value="October">Outubro</button>
+                <button class="filter-btn" data-filter="month" data-value="November">Novembro</button>
+                <button class="filter-btn" data-filter="month" data-value="December">Dezembro</button>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">Canal:</span>
+                <button class="filter-btn active" data-filter="channel" data-value="all">Todos</button>
+                <button class="filter-btn" data-filter="channel" data-value="Email">Email</button>
+                <button class="filter-btn" data-filter="channel" data-value="WhatsApp">WhatsApp</button>
+            </div>
         </div>
 
-        <!-- Main Content -->
-        <div id="app">
-            <!-- Filters -->
-            <div class="filters">
-                <h3>🔍 Filtros</h3>
-                <div class="filter-grid">
-                    <div class="filter-group">
-                        <label>Mês</label>
-                        <select id="monthFilter" onchange="applyFilters()">
-                            <option value="">Todos</option>
-                            <option value="October">October</option>
-                            <option value="November">November</option>
-                            <option value="December">December</option>
-                        </select>
-                    </div>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Planejado</div>
+                <div class="kpi-value" id="kpi-planejado">0</div>
+                <div class="kpi-change">Mensagens planejadas</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Entregue</div>
+                <div class="kpi-value" id="kpi-entregue">0</div>
+                <div class="kpi-change">Mensagens entregues</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Taxa Média Entrega</div>
+                <div class="kpi-value" id="kpi-taxa-entrega">0%</div>
+                <div class="kpi-change">Eficiência de entrega</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Taxa Média Leitura</div>
+                <div class="kpi-value" id="kpi-taxa-leitura">0%</div>
+                <div class="kpi-change">Engajamento</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Visitado</div>
+                <div class="kpi-value" id="kpi-visitado">0</div>
+                <div class="kpi-change">Cliques e visitas</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Taxa Média Visita</div>
+                <div class="kpi-value" id="kpi-taxa-visita">0%</div>
+                <div class="kpi-change">Click-through rate</div>
+            </div>
+        </div>
 
-                    <div class="filter-group">
-                        <label>Tipo de Conteúdo</label>
-                        <select id="typeFilter" onchange="applyFilters()">
-                            <option value="">Todos</option>
-                            <option value="email">Email</option>
-                            <option value="whatsapp">WhatsApp</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label>Especialidade</label>
-                        <select id="directionFilter" onchange="applyFilters()">
-                            <option value="">Todos</option>
-                            <option value="Oncology / Hematology">Oncology / Hematology</option>
-                            <option value="Primary Care">Primary Care</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label>Distribuição</label>
-                        <select id="distributionFilter" onchange="applyFilters()">
-                            <option value="">Todos</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <button class="btn btn-primary" onclick="resetFilters()">↻ Limpar Filtros</button>
-                    </div>
-
-                    <div class="filter-group">
-                        <button class="btn btn-secondary" onclick="toggleExportMenu()">📥 Exportar Dados</button>
-                    </div>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>📈 Mensagens por Mês</h3>
+                <div class="chart">
+                    <canvas id="chartMeses"></canvas>
                 </div>
             </div>
-
-            <!-- KPI Cards -->
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-label">📧 Total Planejado</div>
-                    <div class="kpi-value" id="kpiPlanned">0</div>
-                    <div class="kpi-change">Mensagens inicialmente planejadas</div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-label">✅ Taxa de Entrega</div>
-                    <div class="kpi-value" id="kpiDelivery">0%</div>
-                    <div class="kpi-change">De todas as mensagens enviadas</div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-label">👀 Taxa de Leitura</div>
-                    <div class="kpi-value" id="kpiRead">0%</div>
-                    <div class="kpi-change">Mensagens abertas/lidas</div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-label">🔗 Taxa de Cliques</div>
-                    <div class="kpi-value" id="kpiVisit">0%</div>
-                    <div class="kpi-change">Links visitados</div>
+            <div class="chart-card">
+                <h3>📡 Desempenho por Canal</h3>
+                <div class="chart">
+                    <canvas id="chartCanais"></canvas>
                 </div>
             </div>
-
-            <!-- Charts -->
-            <div class="charts-grid">
-                <!-- Chart 1: Performance by Month -->
-                <div class="chart-card">
-                    <h3>📈 Performance por Mês</h3>
-                    <div class="chart-container">
-                        <canvas id="monthChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Chart 2: Content Type Distribution -->
-                <div class="chart-card">
-                    <h3>📊 Distribuição por Tipo</h3>
-                    <div class="chart-container">
-                        <canvas id="typeChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Chart 3: Funnel Analysis -->
-                <div class="chart-card">
-                    <h3>🌊 Funil de Conversão</h3>
-                    <div class="chart-container">
-                        <canvas id="funnelChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Chart 4: Direction Breakdown -->
-                <div class="chart-card">
-                    <h3>🏥 Performance por Especialidade</h3>
-                    <div class="chart-container">
-                        <canvas id="directionChart"></canvas>
-                    </div>
+            <div class="chart-card">
+                <h3>📊 Taxa de Entrega por Mês</h3>
+                <div class="chart">
+                    <canvas id="chartTaxaEntrega"></canvas>
                 </div>
             </div>
-
-            <!-- Top Items -->
-            <div class="top-items">
-                <div class="top-items-card">
-                    <h3>🏆 Top 5 Campanhas (Entrega)</h3>
-                    <div id="topDelivery"></div>
-                </div>
-
-                <div class="top-items-card">
-                    <h3>🌟 Top 5 Campanhas (Leitura)</h3>
-                    <div id="topRead"></div>
-                </div>
-
-                <div class="top-items-card">
-                    <h3>🔥 Top 5 Campanhas (Cliques)</h3>
-                    <div id="topVisit"></div>
+            <div class="chart-card">
+                <h3>👁️ Taxa de Leitura por Canal</h3>
+                <div class="chart">
+                    <canvas id="chartTaxaLeitura"></canvas>
                 </div>
             </div>
-
-            <!-- Data Table -->
-            <div class="table-card">
-                <h3>📋 Dados Filtrados</h3>
-                <div class="export-section">
-                    <button class="btn btn-secondary btn-small" onclick="exportCSV()">📄 Exportar CSV</button>
-                    <button class="btn btn-secondary btn-small" onclick="exportJSON()">📋 Exportar JSON</button>
-                </div>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Campanha</th>
-                                <th>Tipo</th>
-                                <th>Mês</th>
-                                <th>Planejado</th>
-                                <th>Enviado</th>
-                                <th>Entregue</th>
-                                <th>Lido</th>
-                                <th>Visitado</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dataTable"></tbody>
-                    </table>
+            <div class="chart-card">
+                <h3>🔗 Visitantes por Mês</h3>
+                <div class="chart">
+                    <canvas id="chartVisitas"></canvas>
                 </div>
             </div>
+            <div class="chart-card">
+                <h3>💰 Funnel de Conversão</h3>
+                <div class="chart">
+                    <canvas id="chartFunnel"></canvas>
+                </div>
+            </div>
+        </div>
 
-            <!-- Message Area -->
-            <div id="messageArea"></div>
+        <div class="table-card">
+            <h3>📋 Dados Detalhados</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th>Canal</th>
+                        <th>Planejado</th>
+                        <th>Enviado</th>
+                        <th>Entregue</th>
+                        <th>Taxa Entrega</th>
+                        <th>Lido</th>
+                        <th>Taxa Leitura</th>
+                        <th>Visitado</th>
+                        <th>Taxa Visita</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="insights-grid" style="margin-top: 24px;">
+            <div class="insight-card">
+                <div class="insight-title">💡 Melhor Performance</div>
+                <div class="insight-value" id="insight-best">-</div>
+                <div class="insight-desc">Canal com maior taxa de entrega</div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-title">📌 Pico de Volume</div>
+                <div class="insight-value" id="insight-peak">-</div>
+                <div class="insight-desc">Período com maior envio</div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-title">🎯 Engajamento</div>
+                <div class="insight-value" id="insight-engagement">-</div>
+                <div class="insight-desc">Média de leitura dos filtros</div>
+            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
-        // Raw data from Excel
-        const rawData = [
-            {"Content name":"[EMAIL][BOASFESTAS][EXTERNO]","Content type":"email","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Boas Festas Externos - e-mail - reenvio","Target audience":"[PERSONA][ALL]","Planned, qty":19680,"Sent, qty":19065,"Sent, %":0.96875,"Delivered, qty":17369,"Delivered, %":0.9110411749278783,"Read, qty":2533,"Read. %":0.145834532788301,"Visited, qty":390,"Visited, %":0.1539676273193841,"Undelivered, qty":1696,"Undelivered, %":0.08895882507212169,"Unsent, qty":615,"Unsent, %":0.03125},
-            {"Content name":"[EMAIL][BOASFESTAS][EXTERNO]","Content type":"email","Month":"December","Direction":"Primary Care","Distribution name":"Boas Festas Externos - e-mail - reenvio","Target audience":"[PERSONA][ALL]","Planned, qty":19680,"Sent, qty":19065,"Sent, %":0.96875,"Delivered, qty":17369,"Delivered, %":0.9110411749278783,"Read, qty":2533,"Read. %":0.145834532788301,"Visited, qty":390,"Visited, %":0.1539676273193841,"Undelivered, qty":1696,"Undelivered, %":0.08895882507212169,"Unsent, qty":615,"Unsent, %":0.03125},
-            {"Content name":"Alerta de saúde: Alta de gripes","Content type":"email","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Alerta de Saúde: Alta de gripes.","Target audience":"Panpharma - Natcofarma","Planned, qty":307,"Sent, qty":305,"Sent, %":0.993485342,"Delivered, qty":214,"Delivered, %":0.7016393443,"Read, qty":42,"Read. %":0.1962616822,"Visited, qty":1,"Visited, %":0.0238095238,"Undelivered, qty":91,"Undelivered, %":0.2983606557,"Unsent, qty":2,"Unsent, %":0.006514658},
-            {"Content name":"Alerta de saúde: Alta de gripes","Content type":"email","Month":"October","Direction":"Primary Care","Distribution name":"Alerta de Saúde: Alta de gripes.","Target audience":"Panpharma - Natcofarma","Planned, qty":307,"Sent, qty":305,"Sent, %":0.993485342,"Delivered, qty":214,"Delivered, %":0.7016393443,"Read, qty":42,"Read. %":0.1962616822,"Visited, qty":1,"Visited, %":0.0238095238,"Undelivered, qty":91,"Undelivered, %":0.2983606557,"Unsent, qty":2,"Unsent, %":0.006514658},
-            {"Content name":"Alerta de saúde: Alta de gripes","Content type":"email","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Alerta de Saúde: Alta de gripes.","Target audience":"Santa Cruz - Natcofarma","Planned, qty":650,"Sent, qty":645,"Sent, %":0.9923076923,"Delivered, qty":516,"Delivered, %":0.8,"Read, qty":118,"Read. %":0.2286821705,"Visited, qty":1,"Visited, %":0.0084745763,"Undelivered, qty":129,"Undelivered, %":0.2,"Unsent, qty":5,"Unsent, %":0.0076923077},
-            {"Content name":"Alerta de saúde: Alta de gripes","Content type":"email","Month":"October","Direction":"Primary Care","Distribution name":"Alerta de Saúde: Alta de gripes.","Target audience":"Santa Cruz - Natcofarma","Planned, qty":650,"Sent, qty":645,"Sent, %":0.9923076923,"Delivered, qty":516,"Delivered, %":0.8,"Read, qty":118,"Read. %":0.2286821705,"Visited, qty":1,"Visited, %":0.0084745763,"Undelivered, qty":129,"Undelivered, %":0.2,"Unsent, qty":5,"Unsent, %":0.0076923077},
-            {"Content name":"[EMAIL][AGRADECIMENTO][PP]","Content type":"email","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Agradecimento PP - e-mail","Target audience":"Grupo Panpharma Novo","Planned, qty":484,"Sent, qty":484,"Sent, %":1,"Delivered, qty":452,"Delivered, %":0.9338842975,"Read, qty":115,"Read. %":0.2544247788,"Visited, qty":29,"Visited, %":0.252173913,"Undelivered, qty":32,"Undelivered, %":0.0661157025,"Unsent, qty":0,"Unsent, %":0},
-            {"Content name":"[EMAIL][AGRADECIMENTO][PP]","Content type":"email","Month":"December","Direction":"Primary Care","Distribution name":"Agradecimento PP - e-mail","Target audience":"Grupo Panpharma Novo","Planned, qty":484,"Sent, qty":484,"Sent, %":1,"Delivered, qty":452,"Delivered, %":0.9338842975,"Read, qty":115,"Read. %":0.2544247788,"Visited, qty":29,"Visited, %":0.252173913,"Undelivered, qty":32,"Undelivered, %":0.0661157025,"Unsent, qty":0,"Unsent, %":0},
-            {"Content name":"1º Genérico carfilzomibe - Natcofarma","Content type":"whatsapp","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Carfilzomibe - Hemato - Base CRM - whatsapp","Target audience":"Carfilzomibe - Hematologistas","Planned, qty":255,"Sent, qty":202,"Sent, %":0.7921568627,"Delivered, qty":162,"Delivered, %":0.801980198,"Read, qty":58,"Read. %":0.3580246914,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":40,"Undelivered, %":0.198019802,"Unsent, qty":53,"Unsent, %":0.2078431373},
-            {"Content name":"1º Genérico carfilzomibe - Natcofarma","Content type":"whatsapp","Month":"October","Direction":"Primary Care","Distribution name":"Carfilzomibe - Hemato - Base CRM - whatsapp","Target audience":"Carfilzomibe - Hematologistas","Planned, qty":255,"Sent, qty":202,"Sent, %":0.7921568627,"Delivered, qty":162,"Delivered, %":0.801980198,"Read, qty":58,"Read. %":0.3580246914,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":40,"Undelivered, %":0.198019802,"Unsent, qty":53,"Unsent, %":0.2078431373},
-            {"Content name":"[WHATSAPP][ERIBULINA][ONCO]","Content type":"whatsapp","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Disparo campanha Eribulina - oficial - Onco","Target audience":"[PERSONA][ONCOLOGISTA][LEADS]","Planned, qty":1385,"Sent, qty":1276,"Sent, %":0.921299639,"Delivered, qty":867,"Delivered, %":0.6794670846,"Read, qty":328,"Read. %":0.3783160323,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":398,"Undelivered, %":0.3119122257,"Unsent, qty":109,"Unsent, %":0.078700361},
-            {"Content name":"[WHATSAPP][ERIBULINA][ONCO]","Content type":"whatsapp","Month":"December","Direction":"Primary Care","Distribution name":"Disparo campanha Eribulina - oficial - Onco","Target audience":"[PERSONA][ONCOLOGISTA][LEADS]","Planned, qty":1385,"Sent, qty":1276,"Sent, %":0.921299639,"Delivered, qty":867,"Delivered, %":0.6794670846,"Read, qty":328,"Read. %":0.3783160323,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":398,"Undelivered, %":0.3119122257,"Unsent, qty":109,"Unsent, %":0.078700361},
-            {"Content name":"Genérico carfilzomibe - Natcofarma - e-mail","Content type":"email","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Carfilzomibe - Hemato - Planilha - e-mail","Target audience":"Carfilzomibe - Hematologistas - Planilha","Planned, qty":500,"Sent, qty":494,"Sent, %":0.988,"Delivered, qty":308,"Delivered, %":0.6234817814,"Read, qty":118,"Read. %":0.3831168831,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":186,"Undelivered, %":0.3765182186,"Unsent, qty":6,"Unsent, %":0.012},
-            {"Content name":"Genérico carfilzomibe - Natcofarma - e-mail","Content type":"email","Month":"October","Direction":"Primary Care","Distribution name":"Carfilzomibe - Hemato - Planilha - e-mail","Target audience":"Carfilzomibe - Hematologistas - Planilha","Planned, qty":500,"Sent, qty":494,"Sent, %":0.988,"Delivered, qty":308,"Delivered, %":0.6234817814,"Read, qty":118,"Read. %":0.3831168831,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":186,"Undelivered, %":0.3765182186,"Unsent, qty":6,"Unsent, %":0.012},
-            {"Content name":"1º Genérico carfilzomibe - Natcofarma","Content type":"whatsapp","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Carfilzomibe - Hemato - Planilha - whatsapp","Target audience":"Carfilzomibe - Hematologistas - Planilha","Planned, qty":374,"Sent, qty":370,"Sent, %":0.9893048128,"Delivered, qty":256,"Delivered, %":0.6918918919,"Read, qty":100,"Read. %":0.390625,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":104,"Undelivered, %":0.2810810811,"Unsent, qty":4,"Unsent, %":0.0106951872},
-            {"Content name":"1º Genérico carfilzomibe - Natcofarma","Content type":"whatsapp","Month":"October","Direction":"Primary Care","Distribution name":"Carfilzomibe - Hemato - Planilha - whatsapp","Target audience":"Carfilzomibe - Hematologistas - Planilha","Planned, qty":374,"Sent, qty":370,"Sent, %":0.9893048128,"Delivered, qty":256,"Delivered, %":0.6918918919,"Read, qty":100,"Read. %":0.390625,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":104,"Undelivered, %":0.2810810811,"Unsent, qty":4,"Unsent, %":0.0106951872},
-            {"Content name":"Dia do Hematologista WA","Content type":"whatsapp","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Dia do Hematologista","Target audience":"Dia do Hematologista","Planned, qty":630,"Sent, qty":481,"Sent, %":0.7634920635,"Delivered, qty":311,"Delivered, %":0.6465696466,"Read, qty":125,"Read. %":0.4019292605,"Visited, qty":9,"Visited, %":0.072,"Undelivered, qty":133,"Undelivered, %":0.2765072765,"Unsent, qty":149,"Unsent, %":0.2365079365},
-            {"Content name":"Dia do Hematologista WA","Content type":"whatsapp","Month":"October","Direction":"Primary Care","Distribution name":"Dia do Hematologista","Target audience":"Dia do Hematologista","Planned, qty":630,"Sent, qty":481,"Sent, %":0.7634920635,"Delivered, qty":311,"Delivered, %":0.6465696466,"Read, qty":125,"Read. %":0.4019292605,"Visited, qty":9,"Visited, %":0.072,"Undelivered, qty":133,"Undelivered, %":0.2765072765,"Unsent, qty":149,"Unsent, %":0.2365079365},
-            {"Content name":"Dia do Hematologista","Content type":"email","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Dia do Hematologista - e-mail - Base planilha Carfil","Target audience":"Carfilzomibe - Hematologistas - Planilha","Planned, qty":462,"Sent, qty":460,"Sent, %":0.9956709957,"Delivered, qty":395,"Delivered, %":0.8586956522,"Read, qty":159,"Read. %":0.4025316456,"Visited, qty":8,"Visited, %":0.0503144654,"Undelivered, qty":65,"Undelivered, %":0.1413043478,"Unsent, qty":2,"Unsent, %":0.0043290043},
-            {"Content name":"Dia do Hematologista","Content type":"email","Month":"October","Direction":"Primary Care","Distribution name":"Dia do Hematologista - e-mail - Base planilha Carfil","Target audience":"Carfilzomibe - Hematologistas - Planilha","Planned, qty":462,"Sent, qty":460,"Sent, %":0.9956709957,"Delivered, qty":395,"Delivered, %":0.8586956522,"Read, qty":159,"Read. %":0.4025316456,"Visited, qty":8,"Visited, %":0.0503144654,"Undelivered, qty":65,"Undelivered, %":0.1413043478,"Unsent, qty":2,"Unsent, %":0.0043290043},
-            {"Content name":"Dia do Hematologista WA","Content type":"whatsapp","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Dia do Hematologista - base planilha carfil","Target audience":"Carfilzomibe - Hematologistas - Planilha","Planned, qty":374,"Sent, qty":370,"Sent, %":0.9893048128,"Delivered, qty":226,"Delivered, %":0.6108108108,"Read, qty":92,"Read. %":0.407079646,"Visited, qty":4,"Visited, %":0.0434782609,"Undelivered, qty":106,"Undelivered, %":0.2864864865,"Unsent, qty":4,"Unsent, %":0.0106951872},
-            {"Content name":"Dia do Hematologista WA","Content type":"whatsapp","Month":"October","Direction":"Primary Care","Distribution name":"Dia do Hematologista - base planilha carfil","Target audience":"Carfilzomibe - Hematologistas - Planilha","Planned, qty":374,"Sent, qty":370,"Sent, %":0.9893048128,"Delivered, qty":226,"Delivered, %":0.6108108108,"Read, qty":92,"Read. %":0.407079646,"Visited, qty":4,"Visited, %":0.0434782609,"Undelivered, qty":106,"Undelivered, %":0.2864864865,"Unsent, qty":4,"Unsent, %":0.0106951872},
-            {"Content name":"email_Agradecimento_hemo","Content type":"email","Month":"November","Direction":"Oncology / Hematology","Distribution name":"Hemo_2025_email","Target audience":"Hemo_2025_Natcofarma","Planned, qty":1064,"Sent, qty":1029,"Sent, %":0.9671052632,"Delivered, qty":773,"Delivered, %":0.7512147716,"Read, qty":319,"Read. %":0.4126778784,"Visited, qty":40,"Visited, %":0.1253918495,"Undelivered, qty":256,"Undelivered, %":0.2487852284,"Unsent, qty":35,"Unsent, %":0.0328947368},
-            {"Content name":"email_Agradecimento_hemo","Content type":"email","Month":"November","Direction":"Primary Care","Distribution name":"Hemo_2025_email","Target audience":"Hemo_2025_Natcofarma","Planned, qty":1064,"Sent, qty":1029,"Sent, %":0.9671052632,"Delivered, qty":773,"Delivered, %":0.7512147716,"Read, qty":319,"Read. %":0.4126778784,"Visited, qty":40,"Visited, %":0.1253918495,"Undelivered, qty":256,"Undelivered, %":0.2487852284,"Unsent, qty":35,"Unsent, %":0.0328947368},
-            {"Content name":"[EMAIL][AGRADECIMENTO][SC]","Content type":"email","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Agradecimento SC - e-mail","Target audience":"Grupo Santa Cruz Novo","Planned, qty":484,"Sent, qty":483,"Sent, %":0.9979338843,"Delivered, qty":424,"Delivered, %":0.8778467909,"Read, qty":180,"Read. %":0.4245283019,"Visited, qty":96,"Visited, %":0.5333333333,"Undelivered, qty":59,"Undelivered, %":0.1221532091,"Unsent, qty":1,"Unsent, %":0.0020661157},
-            {"Content name":"[EMAIL][AGRADECIMENTO][SC]","Content type":"email","Month":"December","Direction":"Primary Care","Distribution name":"Agradecimento SC - e-mail","Target audience":"Grupo Santa Cruz Novo","Planned, qty":484,"Sent, qty":483,"Sent, %":0.9979338843,"Delivered, qty":424,"Delivered, %":0.8778467909,"Read, qty":180,"Read. %":0.4245283019,"Visited, qty":96,"Visited, %":0.5333333333,"Undelivered, qty":59,"Undelivered, %":0.1221532091,"Unsent, qty":1,"Unsent, %":0.0020661157},
-            {"Content name":"Dia do Hematologista","Content type":"email","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Dia do Hematologista - e-mail","Target audience":"Dia do Hematologista","Planned, qty":564,"Sent, qty":475,"Sent, %":0.8421985816,"Delivered, qty":407,"Delivered, %":0.8568421053,"Read, qty":173,"Read. %":0.4250614251,"Visited, qty":8,"Visited, %":0.0462427746,"Undelivered, qty":68,"Undelivered, %":0.1431578947,"Unsent, qty":89,"Unsent, %":0.1578014184},
-            {"Content name":"Dia do Hematologista","Content type":"email","Month":"October","Direction":"Primary Care","Distribution name":"Dia do Hematologista - e-mail","Target audience":"Dia do Hematologista","Planned, qty":564,"Sent, qty":475,"Sent, %":0.8421985816,"Delivered, qty":407,"Delivered, %":0.8568421053,"Read, qty":173,"Read. %":0.4250614251,"Visited, qty":8,"Visited, %":0.0462427746,"Undelivered, qty":68,"Undelivered, %":0.1431578947,"Unsent, qty":89,"Unsent, %":0.1578014184},
-            {"Content name":"[EMAIL][ERIBULINA][ONCO]","Content type":"email","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Eribulina - Persona - Oncologista","Target audience":"[PERSONA][ONCOLOGISTA][LEADS]","Planned, qty":1116,"Sent, qty":1112,"Sent, %":0.9964157706,"Delivered, qty":675,"Delivered, %":0.6070143885,"Read, qty":324,"Read. %":0.48,"Visited, qty":9,"Visited, %":0.0277777778,"Undelivered, qty":437,"Undelivered, %":0.3929856115,"Unsent, qty":4,"Unsent, %":0.0035842294},
-            {"Content name":"[EMAIL][ERIBULINA][ONCO]","Content type":"email","Month":"December","Direction":"Primary Care","Distribution name":"Eribulina - Persona - Oncologista","Target audience":"[PERSONA][ONCOLOGISTA][LEADS]","Planned, qty":1116,"Sent, qty":1112,"Sent, %":0.9964157706,"Delivered, qty":675,"Delivered, %":0.6070143885,"Read, qty":324,"Read. %":0.48,"Visited, qty":9,"Visited, %":0.0277777778,"Undelivered, qty":437,"Undelivered, %":0.3929856115,"Unsent, qty":4,"Unsent, %":0.0035842294},
-            {"Content name":"[WHATSAPP][BOASFFESTAS][EXTERNO]","Content type":"whatsapp","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Boas Festas - Externo - Parte 2","Target audience":"[PERSONA][ALL] - PArte 2","Planned, qty":4947,"Sent, qty":4561,"Sent, %":0.9219729129,"Delivered, qty":3361,"Delivered, %":0.7368998027,"Read, qty":1691,"Read. %":0.5031240702,"Visited, qty":162,"Visited, %":0.095801301,"Undelivered, qty":1028,"Undelivered, %":0.225389169,"Unsent, qty":386,"Unsent, %":0.0780270871},
-            {"Content name":"[WHATSAPP][BOASFFESTAS][EXTERNO]","Content type":"whatsapp","Month":"December","Direction":"Primary Care","Distribution name":"Boas Festas - Externo - Parte 2","Target audience":"[PERSONA][ALL] - PArte 2","Planned, qty":4947,"Sent, qty":4561,"Sent, %":0.9219729129,"Delivered, qty":3361,"Delivered, %":0.7368998027,"Read, qty":1691,"Read. %":0.5031240702,"Visited, qty":162,"Visited, %":0.095801301,"Undelivered, qty":1028,"Undelivered, %":0.225389169,"Unsent, qty":386,"Unsent, %":0.0780270871},
-            {"Content name":"Agradecimento_hemo","Content type":"whatsapp","Month":"November","Direction":"Oncology / Hematology","Distribution name":"Hemo_2025_whatsapp","Target audience":"Hemo_2025_Natcofarma","Planned, qty":1039,"Sent, qty":1027,"Sent, %":0.9884504331,"Delivered, qty":955,"Delivered, %":0.9298928919,"Read, qty":493,"Read. %":0.5162303665,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":53,"Undelivered, %":0.0516066212,"Unsent, qty":12,"Unsent, %":0.0115495669},
-            {"Content name":"Agradecimento_hemo","Content type":"whatsapp","Month":"November","Direction":"Primary Care","Distribution name":"Hemo_2025_whatsapp","Target audience":"Hemo_2025_Natcofarma","Planned, qty":1039,"Sent, qty":1027,"Sent, %":0.9884504331,"Delivered, qty":955,"Delivered, %":0.9298928919,"Read, qty":493,"Read. %":0.5162303665,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":53,"Undelivered, %":0.0516066212,"Unsent, qty":12,"Unsent, %":0.0115495669},
-            {"Content name":"[WHATSAPP][BOASFFESTAS][EXTERNO]","Content type":"whatsapp","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Boas Festas - Externo - Prte 1","Target audience":"[PERSONA][ALL] - PArte 1","Planned, qty":4558,"Sent, qty":4227,"Sent, %":0.92738043,"Delivered, qty":2965,"Delivered, %":0.7014431039,"Read, qty":1561,"Read. %":0.5264755481,"Visited, qty":110,"Visited, %":0.0704676489,"Undelivered, qty":1119,"Undelivered, %":0.2647267566,"Unsent, qty":331,"Unsent, %":0.07261957},
-            {"Content name":"[WHATSAPP][BOASFFESTAS][EXTERNO]","Content type":"whatsapp","Month":"December","Direction":"Primary Care","Distribution name":"Boas Festas - Externo - Prte 1","Target audience":"[PERSONA][ALL] - PArte 1","Planned, qty":4558,"Sent, qty":4227,"Sent, %":0.92738043,"Delivered, qty":2965,"Delivered, %":0.7014431039,"Read, qty":1561,"Read. %":0.5264755481,"Visited, qty":110,"Visited, %":0.0704676489,"Undelivered, qty":1119,"Undelivered, %":0.2647267566,"Unsent, qty":331,"Unsent, %":0.07261957},
-            {"Content name":"Genérico carfilzomibe - Natcofarma - e-mail","Content type":"email","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Carfilzomibe - Hemato - Base CRM - e-mail","Target audience":"Carfilzomibe - Hematologistas","Planned, qty":102,"Sent, qty":102,"Sent, %":1,"Delivered, qty":102,"Delivered, %":1,"Read, qty":58,"Read. %":0.568627451,"Visited, qty":31,"Visited, %":0.5344827586,"Undelivered, qty":0,"Undelivered, %":0,"Unsent, qty":0,"Unsent, %":0},
-            {"Content name":"Genérico carfilzomibe - Natcofarma - e-mail","Content type":"email","Month":"October","Direction":"Primary Care","Distribution name":"Carfilzomibe - Hemato - Base CRM - e-mail","Target audience":"Carfilzomibe - Hematologistas","Planned, qty":102,"Sent, qty":102,"Sent, %":1,"Delivered, qty":102,"Delivered, %":1,"Read, qty":58,"Read. %":0.568627451,"Visited, qty":31,"Visited, %":0.5344827586,"Undelivered, qty":0,"Undelivered, %":0,"Unsent, qty":0,"Unsent, %":0},
-            {"Content name":"[WHATSAPP][AGRADECIMENTO][PP]","Content type":"whatsapp","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Agradecimento PP - whatsapp","Target audience":"Panpharma - Natcofarma","Planned, qty":178,"Sent, qty":177,"Sent, %":0.9943820225,"Delivered, qty":132,"Delivered, %":0.7457627119,"Read, qty":78,"Read. %":0.5909090909,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":40,"Undelivered, %":0.2259887006,"Unsent, qty":1,"Unsent, %":0.0056179775},
-            {"Content name":"[WHATSAPP][AGRADECIMENTO][PP]","Content type":"whatsapp","Month":"December","Direction":"Primary Care","Distribution name":"Agradecimento PP - whatsapp","Target audience":"Panpharma - Natcofarma","Planned, qty":178,"Sent, qty":177,"Sent, %":0.9943820225,"Delivered, qty":132,"Delivered, %":0.7457627119,"Read, qty":78,"Read. %":0.5909090909,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":40,"Undelivered, %":0.2259887006,"Unsent, qty":1,"Unsent, %":0.0056179775},
-            {"Content name":"[EMAIL][BOASFESTAS][EXTERNO]","Content type":"email","Month":"December","Direction":"Oncology / Hematology","Distribution name":"E-mail - Boas Festas - Externo","Target audience":"Natcofarma interno","Planned, qty":98,"Sent, qty":98,"Sent, %":1,"Delivered, qty":98,"Delivered, %":1,"Read, qty":59,"Read. %":0.6020408163,"Visited, qty":22,"Visited, %":0.3728813559,"Undelivered, qty":0,"Undelivered, %":0,"Unsent, qty":0,"Unsent, %":0},
-            {"Content name":"[EMAIL][BOASFESTAS][EXTERNO]","Content type":"email","Month":"December","Direction":"Primary Care","Distribution name":"E-mail - Boas Festas - Externo","Target audience":"Natcofarma interno","Planned, qty":98,"Sent, qty":98,"Sent, %":1,"Delivered, qty":98,"Delivered, %":1,"Read, qty":59,"Read. %":0.6020408163,"Visited, qty":22,"Visited, %":0.3728813559,"Undelivered, qty":0,"Undelivered, %":0,"Unsent, qty":0,"Unsent, %":0},
-            {"Content name":"Vírus da Gripe","Content type":"whatsapp","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Campanha gripe.","Target audience":"Panpharma - Natcofarma","Planned, qty":178,"Sent, qty":171,"Sent, %":0.9606741573,"Delivered, qty":133,"Delivered, %":0.7777777778,"Read, qty":82,"Read. %":0.6165413534,"Visited, qty":12,"Visited, %":0.1463414634,"Undelivered, qty":30,"Undelivered, %":0.1754385965,"Unsent, qty":7,"Unsent, %":0.0393258427},
-            {"Content name":"Vírus da Gripe","Content type":"whatsapp","Month":"October","Direction":"Primary Care","Distribution name":"Campanha gripe.","Target audience":"Panpharma - Natcofarma","Planned, qty":178,"Sent, qty":171,"Sent, %":0.9606741573,"Delivered, qty":133,"Delivered, %":0.7777777778,"Read, qty":82,"Read. %":0.6165413534,"Visited, qty":12,"Visited, %":0.1463414634,"Undelivered, qty":30,"Undelivered, %":0.1754385965,"Unsent, qty":7,"Unsent, %":0.0393258427},
-            {"Content name":"[WHATSAPP][AGRADECIMENTO][SC]","Content type":"whatsapp","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Agradecimento SC - whatsapp","Target audience":"Grupo Santa Cruz Novo","Planned, qty":111,"Sent, qty":110,"Sent, %":0.990990991,"Delivered, qty":82,"Delivered, %":0.7454545455,"Read, qty":51,"Read. %":0.6219512195,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":23,"Undelivered, %":0.2090909091,"Unsent, qty":1,"Unsent, %":0.009009009},
-            {"Content name":"[WHATSAPP][AGRADECIMENTO][SC]","Content type":"whatsapp","Month":"December","Direction":"Primary Care","Distribution name":"Agradecimento SC - whatsapp","Target audience":"Grupo Santa Cruz Novo","Planned, qty":111,"Sent, qty":110,"Sent, %":0.990990991,"Delivered, qty":82,"Delivered, %":0.7454545455,"Read, qty":51,"Read. %":0.6219512195,"Visited, qty":null,"Visited, %":null,"Undelivered, qty":23,"Undelivered, %":0.2090909091,"Unsent, qty":1,"Unsent, %":0.009009009},
-            {"Content name":"Vírus da Gripe","Content type":"whatsapp","Month":"October","Direction":"Oncology / Hematology","Distribution name":"Campanha gripe.","Target audience":"Santa Cruz - Natcofarma","Planned, qty":335,"Sent, qty":325,"Sent, %":0.9701492537,"Delivered, qty":270,"Delivered, %":0.8307692308,"Read, qty":171,"Read. %":0.6333333333,"Visited, qty":15,"Visited, %":0.0877192982,"Undelivered, qty":34,"Undelivered, %":0.1046153846,"Unsent, qty":10,"Unsent, %":0.0298507463},
-            {"Content name":"Vírus da Gripe","Content type":"whatsapp","Month":"October","Direction":"Primary Care","Distribution name":"Campanha gripe.","Target audience":"Santa Cruz - Natcofarma","Planned, qty":335,"Sent, qty":325,"Sent, %":0.9701492537,"Delivered, qty":270,"Delivered, %":0.8307692308,"Read, qty":171,"Read. %":0.6333333333,"Visited, qty":15,"Visited, %":0.0877192982,"Undelivered, qty":34,"Undelivered, %":0.1046153846,"Unsent, qty":10,"Unsent, %":0.0298507463},
-            {"Content name":"[WHATSAPP][BOASFFESTAS][EXTERNO]","Content type":"whatsapp","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Whatsapp Boas Festas - Externo","Target audience":"Natcofarma interno","Planned, qty":59,"Sent, qty":58,"Sent, %":0.9830508475,"Delivered, qty":51,"Delivered, %":0.8793103448,"Read, qty":40,"Read. %":0.7843137255,"Visited, qty":9,"Visited, %":0.225,"Undelivered, qty":6,"Undelivered, %":0.1034482759,"Unsent, qty":1,"Unsent, %":0.0169491525},
-            {"Content name":"[WHATSAPP][BOASFFESTAS][EXTERNO]","Content type":"whatsapp","Month":"December","Direction":"Primary Care","Distribution name":"Whatsapp Boas Festas - Externo","Target audience":"Natcofarma interno","Planned, qty":59,"Sent, qty":58,"Sent, %":0.9830508475,"Delivered, qty":51,"Delivered, %":0.8793103448,"Read, qty":40,"Read. %":0.7843137255,"Visited, qty":9,"Visited, %":0.225,"Undelivered, qty":6,"Undelivered, %":0.1034482759,"Unsent, qty":1,"Unsent, %":0.0169491525},
-            {"Content name":"[WHATSAPP][BOASFFESTAS][INTERNO]","Content type":"whatsapp","Month":"December","Direction":"Oncology / Hematology","Distribution name":"Whatsapp Boas Festas Interno","Target audience":"Natcofarma interno","Planned, qty":59,"Sent, qty":58,"Sent, %":0.9830508475,"Delivered, qty":35,"Delivered, %":0.6034482759,"Read, qty":28,"Read. %":0.8,"Visited, qty":10,"Visited, %":0.3571428571,"Undelivered, qty":23,"Undelivered, %":0.3965517241,"Unsent, qty":1,"Unsent, %":0.0169491525},
-            {"Content name":"[WHATSAPP][BOASFFESTAS][INTERNO]","Content type":"whatsapp","Month":"December","Direction":"Primary Care","Distribution name":"Whatsapp Boas Festas Interno","Target audience":"Natcofarma interno","Planned, qty":59,"Sent, qty":58,"Sent, %":0.9830508475,"Delivered, qty":35,"Delivered, %":0.6034482759,"Read, qty":28,"Read. %":0.8,"Visited, qty":10,"Visited, %":0.3571428571,"Undelivered, qty":23,"Undelivered, %":0.3965517241,"Unsent, qty":1,"Unsent, %":0.0169491525}
+        // Dados completos
+        const allData = [
+            { month: 'October', channel: 'Email', planejado: 2614, enviado: 2533, entregue: 1985, lido: 707, visitado: 40 },
+            { month: 'October', channel: 'WhatsApp', planejado: 6848, enviado: 6267, entregue: 4615, lido: 1885, visitado: 138 },
+            { month: 'November', channel: 'Email', planejado: 1064, enviado: 1029, entregue: 773, lido: 319, visitado: 40 },
+            { month: 'November', channel: 'WhatsApp', planejado: 3142, enviado: 3083, entregue: 2683, lido: 1305, visitado: 40 },
+            { month: 'December', channel: 'Email', planejado: 54640, enviado: 52856, entregue: 45264, lido: 12166, visitado: 1554 },
+            { month: 'December', channel: 'WhatsApp', planejado: 11678, enviado: 10562, entregue: 7758, lido: 1810, visitado: 120 }
         ];
 
-        let filteredData = [...rawData];
+        let currentFilter = { month: 'all', channel: 'all' };
         let charts = {};
 
-        // Initialize filters dropdown
-        function initializeFilters() {
-            const distributions = [...new Set(rawData.map(d => d["Distribution name"]))];
-            const distributionSelect = document.getElementById('distributionFilter');
-            distributions.forEach(dist => {
-                const option = document.createElement('option');
-                option.value = dist;
-                option.textContent = dist;
-                distributionSelect.appendChild(option);
+        // Função para filtrar dados
+        function getFilteredData() {
+            return allData.filter(item => {
+                const monthMatch = currentFilter.month === 'all' || item.month === currentFilter.month;
+                const channelMatch = currentFilter.channel === 'all' || item.channel === currentFilter.channel;
+                return monthMatch && channelMatch;
             });
         }
 
-        // Apply filters
-        function applyFilters() {
-            const month = document.getElementById('monthFilter').value;
-            const type = document.getElementById('typeFilter').value;
-            const direction = document.getElementById('directionFilter').value;
-            const distribution = document.getElementById('distributionFilter').value;
-
-            filteredData = rawData.filter(d => {
-                return (month === '' || d.Month === month) &&
-                       (type === '' || d['Content type'] === type) &&
-                       (direction === '' || d.Direction === direction) &&
-                       (distribution === '' || d['Distribution name'] === distribution);
+        // Setup de event listeners para filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filterType = this.getAttribute('data-filter');
+                const filterValue = this.getAttribute('data-value');
+                
+                // Remove active de todos os botões do mesmo grupo
+                document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach(b => {
+                    b.classList.remove('active');
+                });
+                
+                // Adiciona active ao clicado
+                this.classList.add('active');
+                
+                // Atualiza filtro
+                if (filterType === 'month') {
+                    currentFilter.month = filterValue;
+                } else if (filterType === 'channel') {
+                    currentFilter.channel = filterValue;
+                }
+                
+                // Atualiza dashboard
+                updateDashboard();
             });
+        });
 
-            updateDashboard();
-        }
-
-        // Reset filters
-        function resetFilters() {
-            document.getElementById('monthFilter').value = '';
-            document.getElementById('typeFilter').value = '';
-            document.getElementById('directionFilter').value = '';
-            document.getElementById('distributionFilter').value = '';
-            filteredData = [...rawData];
-            updateDashboard();
-        }
-
-        // Update KPI cards
+        // Atualizar KPIs
         function updateKPIs() {
-            const totalPlanned = filteredData.reduce((sum, d) => sum + (d['Planned, qty'] || 0), 0);
-            const totalSent = filteredData.reduce((sum, d) => sum + (d['Sent, qty'] || 0), 0);
-            const totalDelivered = filteredData.reduce((sum, d) => sum + (d['Delivered, qty'] || 0), 0);
-            const totalRead = filteredData.reduce((sum, d) => sum + (d['Read, qty'] || 0), 0);
-            const totalVisited = filteredData.reduce((sum, d) => sum + (d['Visited, qty'] || 0), 0);
+            const filtered = getFilteredData();
+            
+            const planejado = filtered.reduce((sum, item) => sum + item.planejado, 0);
+            const enviado = filtered.reduce((sum, item) => sum + item.enviado, 0);
+            const entregue = filtered.reduce((sum, item) => sum + item.entregue, 0);
+            const lido = filtered.reduce((sum, item) => sum + item.lido, 0);
+            const visitado = filtered.reduce((sum, item) => sum + item.visitado, 0);
 
-            const deliveryRate = totalSent > 0 ? ((totalDelivered / totalSent) * 100).toFixed(1) : 0;
-            const readRate = totalDelivered > 0 ? ((totalRead / totalDelivered) * 100).toFixed(1) : 0;
-            const visitRate = totalDelivered > 0 ? ((totalVisited / totalDelivered) * 100).toFixed(1) : 0;
+            const taxaEntrega = enviado > 0 ? ((entregue / enviado) * 100).toFixed(1) : 0;
+            const taxaLeitura = entregue > 0 ? ((lido / entregue) * 100).toFixed(1) : 0;
+            const taxaVisita = lido > 0 ? ((visitado / lido) * 100).toFixed(1) : 0;
 
-            document.getElementById('kpiPlanned').textContent = totalPlanned.toLocaleString('pt-BR');
-            document.getElementById('kpiDelivery').textContent = deliveryRate + '%';
-            document.getElementById('kpiRead').textContent = readRate + '%';
-            document.getElementById('kpiVisit').textContent = visitRate + '%';
+            document.getElementById('kpi-planejado').textContent = planejado.toLocaleString('pt-BR');
+            document.getElementById('kpi-entregue').textContent = entregue.toLocaleString('pt-BR');
+            document.getElementById('kpi-taxa-entrega').textContent = taxaEntrega + '%';
+            document.getElementById('kpi-taxa-leitura').textContent = taxaLeitura + '%';
+            document.getElementById('kpi-visitado').textContent = visitado.toLocaleString('pt-BR');
+            document.getElementById('kpi-taxa-visita').textContent = taxaVisita + '%';
         }
 
-        // Update Charts
+        // Atualizar tabela
+        function updateTable() {
+            const filtered = getFilteredData();
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            filtered.forEach(item => {
+                const taxaEntrega = ((item.entregue / item.enviado) * 100).toFixed(1);
+                const taxaLeitura = ((item.lido / item.entregue) * 100).toFixed(1);
+                const taxaVisita = ((item.visitado / item.lido) * 100).toFixed(1);
+
+                const monthNames = { 'October': 'Outubro', 'November': 'Novembro', 'December': 'Dezembro' };
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${monthNames[item.month]}</td>
+                    <td><span class="channel-badge channel-${item.channel.toLowerCase()}">${item.channel}</span></td>
+                    <td>${item.planejado.toLocaleString('pt-BR')}</td>
+                    <td>${item.enviado.toLocaleString('pt-BR')}</td>
+                    <td>${item.entregue.toLocaleString('pt-BR')}</td>
+                    <td><span class="percentage-badge">${taxaEntrega}%</span></td>
+                    <td>${item.lido.toLocaleString('pt-BR')}</td>
+                    <td><span class="percentage-badge">${taxaLeitura}%</span></td>
+                    <td>${item.visitado.toLocaleString('pt-BR')}</td>
+                    <td><span class="percentage-badge">${taxaVisita}%</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Atualizar gráficos
         function updateCharts() {
-            updateMonthChart();
-            updateTypeChart();
-            updateFunnelChart();
-            updateDirectionChart();
-        }
+            const filtered = getFilteredData();
+            const monthNames = { 'October': 'Outubro', 'November': 'Novembro', 'December': 'Dezembro' };
 
-        function updateMonthChart() {
-            const ctx = document.getElementById('monthChart').getContext('2d');
-            const months = ['October', 'November', 'December'];
-            const deliveredByMonth = months.map(month => 
-                filteredData.filter(d => d.Month === month).reduce((sum, d) => sum + (d['Delivered, qty'] || 0), 0)
-            );
-            const readByMonth = months.map(month => 
-                filteredData.filter(d => d.Month === month).reduce((sum, d) => sum + (d['Read, qty'] || 0), 0)
-            );
+            // Gráfico por meses
+            const byMonth = {};
+            filtered.forEach(item => {
+                const monthName = monthNames[item.month];
+                if (!byMonth[monthName]) byMonth[monthName] = { entregue: 0, lido: 0, visitado: 0 };
+                byMonth[monthName].entregue += item.entregue;
+                byMonth[monthName].lido += item.lido;
+                byMonth[monthName].visitado += item.visitado;
+            });
 
-            if (charts.month) charts.month.destroy();
-            charts.month = new Chart(ctx, {
+            if (charts.chartMeses) charts.chartMeses.destroy();
+            const ctxMeses = document.getElementById('chartMeses').getContext('2d');
+            charts.chartMeses = new Chart(ctxMeses, {
                 type: 'line',
                 data: {
-                    labels: months,
+                    labels: Object.keys(byMonth),
                     datasets: [
-                        {
-                            label: 'Entregues',
-                            data: deliveredByMonth,
-                            borderColor: '#2563eb',
-                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        },
-                        {
-                            label: 'Lidos',
-                            data: readByMonth,
-                            borderColor: '#06b6d4',
-                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }
+                        { label: 'Entregues', data: Object.values(byMonth).map(d => d.entregue), borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)', tension: 0.4, fill: false },
+                        { label: 'Lidos', data: Object.values(byMonth).map(d => d.lido), borderColor: '#4ade80', backgroundColor: 'rgba(74, 222, 128, 0.1)', tension: 0.4, fill: false }
                     ]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { labels: { color: '#cbd5e1' } } 
+                    }, 
+                    scales: { 
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, 
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } 
+                    } 
                 }
             });
-        }
 
-        function updateTypeChart() {
-            const ctx = document.getElementById('typeChart').getContext('2d');
-            const types = [...new Set(filteredData.map(d => d['Content type']))];
-            const deliveredByType = types.map(type => 
-                filteredData.filter(d => d['Content type'] === type).reduce((sum, d) => sum + (d['Delivered, qty'] || 0), 0)
-            );
-            const colors = ['#2563eb', '#06b6d4'];
+            // Gráfico por canais
+            const byChannel = {};
+            filtered.forEach(item => {
+                if (!byChannel[item.channel]) byChannel[item.channel] = 0;
+                byChannel[item.channel] += item.entregue;
+            });
 
-            if (charts.type) charts.type.destroy();
-            charts.type = new Chart(ctx, {
+            if (charts.chartCanais) charts.chartCanais.destroy();
+            const ctxCanais = document.getElementById('chartCanais').getContext('2d');
+            charts.chartCanais = new Chart(ctxCanais, {
                 type: 'doughnut',
                 data: {
-                    labels: types,
-                    datasets: [{
-                        data: deliveredByType,
-                        backgroundColor: colors
-                    }]
+                    labels: Object.keys(byChannel),
+                    datasets: [{ data: Object.values(byChannel), backgroundColor: ['#38bdf8', '#4ade80'] }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } } }
             });
-        }
 
-        function updateFunnelChart() {
-            const ctx = document.getElementById('funnelChart').getContext('2d');
-            const totalPlanned = filteredData.reduce((sum, d) => sum + (d['Planned, qty'] || 0), 0);
-            const totalSent = filteredData.reduce((sum, d) => sum + (d['Sent, qty'] || 0), 0);
-            const totalDelivered = filteredData.reduce((sum, d) => sum + (d['Delivered, qty'] || 0), 0);
-            const totalRead = filteredData.reduce((sum, d) => sum + (d['Read, qty'] || 0), 0);
+            // Taxa de entrega por mês
+            const taxaByMonth = {};
+            filtered.forEach(item => {
+                const monthName = monthNames[item.month];
+                if (!taxaByMonth[monthName]) taxaByMonth[monthName] = { entregue: 0, enviado: 0 };
+                taxaByMonth[monthName].entregue += item.entregue;
+                taxaByMonth[monthName].enviado += item.enviado;
+            });
 
-            if (charts.funnel) charts.funnel.destroy();
-            charts.funnel = new Chart(ctx, {
+            if (charts.chartTaxaEntrega) charts.chartTaxaEntrega.destroy();
+            const ctxTaxaEntrega = document.getElementById('chartTaxaEntrega').getContext('2d');
+            charts.chartTaxaEntrega = new Chart(ctxTaxaEntrega, {
                 type: 'bar',
                 data: {
-                    labels: ['Planejado', 'Enviado', 'Entregue', 'Lido'],
-                    datasets: [{
-                        label: 'Quantidade',
-                        data: [totalPlanned, totalSent, totalDelivered, totalRead],
-                        backgroundColor: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd']
-                    }]
+                    labels: Object.keys(taxaByMonth),
+                    datasets: [{ label: 'Taxa Entrega (%)', data: Object.values(taxaByMonth).map(d => ((d.entregue / d.enviado) * 100).toFixed(1)), backgroundColor: '#38bdf8' }]
                 },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: { beginAtZero: true }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } }, scales: { y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
             });
-        }
 
-        function updateDirectionChart() {
-            const ctx = document.getElementById('directionChart').getContext('2d');
-            const directions = [...new Set(filteredData.map(d => d.Direction))];
-            const deliveredByDirection = directions.map(dir => 
-                filteredData.filter(d => d.Direction === dir).reduce((sum, d) => sum + (d['Delivered, qty'] || 0), 0)
-            );
+            // Taxa leitura por canal
+            const taxaLeituraByChannel = {};
+            filtered.forEach(item => {
+                if (!taxaLeituraByChannel[item.channel]) taxaLeituraByChannel[item.channel] = { lido: 0, entregue: 0 };
+                taxaLeituraByChannel[item.channel].lido += item.lido;
+                taxaLeituraByChannel[item.channel].entregue += item.entregue;
+            });
 
-            if (charts.direction) charts.direction.destroy();
-            charts.direction = new Chart(ctx, {
+            if (charts.chartTaxaLeitura) charts.chartTaxaLeitura.destroy();
+            const ctxTaxaLeitura = document.getElementById('chartTaxaLeitura').getContext('2d');
+            charts.chartTaxaLeitura = new Chart(ctxTaxaLeitura, {
                 type: 'bar',
                 data: {
-                    labels: directions,
-                    datasets: [{
-                        label: 'Entregues',
-                        data: deliveredByDirection,
-                        backgroundColor: '#06b6d4'
-                    }]
+                    labels: Object.keys(taxaLeituraByChannel),
+                    datasets: [{ label: 'Taxa Leitura (%)', data: Object.values(taxaLeituraByChannel).map(d => ((d.lido / d.entregue) * 100).toFixed(1)), backgroundColor: '#4ade80' }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } }, scales: { y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
+            });
+
+            // Visitantes por mês
+            if (charts.chartVisitas) charts.chartVisitas.destroy();
+            const ctxVisitas = document.getElementById('chartVisitas').getContext('2d');
+            charts.chartVisitas = new Chart(ctxVisitas, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(byMonth),
+                    datasets: [{ label: 'Visitados', data: Object.values(byMonth).map(d => d.visitado), borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', tension: 0.4, fill: true }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } }, scales: { y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
+            });
+
+            // Funnel de conversão
+            if (charts.chartFunnel) charts.chartFunnel.destroy();
+            const ctxFunnel = document.getElementById('chartFunnel').getContext('2d');
+            const totalEntregue = filtered.reduce((sum, item) => sum + item.entregue, 0);
+            const totalLido = filtered.reduce((sum, item) => sum + item.lido, 0);
+            const totalVisitado = filtered.reduce((sum, item) => sum + item.visitado, 0);
+
+            charts.chartFunnel = new Chart(ctxFunnel, {
+                type: 'bar',
+                data: {
+                    labels: ['Entregues', 'Lidos', 'Visitados'],
+                    datasets: [{ label: 'Volume', data: [totalEntregue, totalLido, totalVisitado], backgroundColor: ['#38bdf8', '#4ade80', '#f59e0b'] }]
+                },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } }, scales: { x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } }, y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148, 163, 184, 0.1)' } } } }
             });
         }
 
-        // Update Top Items
-        function updateTopItems() {
-            const grouped = {};
-            filteredData.forEach(d => {
-                const name = d['Content name'];
-                if (!grouped[name]) {
-                    grouped[name] = { delivered: 0, read: 0, visited: 0 };
+        // Atualizar insights
+        function updateInsights() {
+            const filtered = getFilteredData();
+            const monthNames = { 'October': 'Outubro', 'November': 'Novembro', 'December': 'Dezembro' };
+            
+            // Melhor performance
+            let bestChannel = '-';
+            let bestRate = 0;
+            const channelData = {};
+            filtered.forEach(item => {
+                if (!channelData[item.channel]) channelData[item.channel] = { entregue: 0, enviado: 0 };
+                channelData[item.channel].entregue += item.entregue;
+                channelData[item.channel].enviado += item.enviado;
+            });
+            Object.entries(channelData).forEach(([channel, data]) => {
+                const rate = (data.entregue / data.enviado) * 100;
+                if (rate > bestRate) {
+                    bestRate = rate;
+                    bestChannel = channel;
                 }
-                grouped[name].delivered += d['Delivered, qty'] || 0;
-                grouped[name].read += d['Read, qty'] || 0;
-                grouped[name].visited += d['Visited, qty'] || 0;
             });
 
-            const sorted = Object.entries(grouped).map(([name, data]) => ({ name, ...data }));
+            // Período com maior volume
+            const byMonth = {};
+            filtered.forEach(item => {
+                const monthName = monthNames[item.month];
+                if (!byMonth[monthName]) byMonth[monthName] = 0;
+                byMonth[monthName] += item.entregue;
+            });
+            let peakMonth = '-';
+            let peakValue = 0;
+            Object.entries(byMonth).forEach(([month, value]) => {
+                if (value > peakValue) {
+                    peakValue = value;
+                    peakMonth = month;
+                }
+            });
 
-            // Top by delivery
-            const topDelivery = sorted.sort((a, b) => b.delivered - a.delivered).slice(0, 5);
-            document.getElementById('topDelivery').innerHTML = topDelivery.map((item, i) => `
-                <div class="item-row">
-                    <div class="item-rank">
-                        <div class="rank-number">${i + 1}</div>
-                        <div class="item-name">${item.name.substring(0, 30)}...</div>
-                    </div>
-                    <div class="item-value">${item.delivered.toLocaleString('pt-BR')}</div>
-                </div>
-            `).join('');
+            // Engajamento geral
+            const totalEntregue = filtered.reduce((sum, item) => sum + item.entregue, 0);
+            const totalLido = filtered.reduce((sum, item) => sum + item.lido, 0);
+            const avgEngagement = totalEntregue > 0 ? ((totalLido / totalEntregue) * 100).toFixed(1) : 0;
 
-            // Top by read
-            const topRead = sorted.sort((a, b) => b.read - a.read).slice(0, 5);
-            document.getElementById('topRead').innerHTML = topRead.map((item, i) => `
-                <div class="item-row">
-                    <div class="item-rank">
-                        <div class="rank-number">${i + 1}</div>
-                        <div class="item-name">${item.name.substring(0, 30)}...</div>
-                    </div>
-                    <div class="item-value">${item.read.toLocaleString('pt-BR')}</div>
-                </div>
-            `).join('');
-
-            // Top by visit
-            const topVisit = sorted.sort((a, b) => b.visited - a.visited).slice(0, 5);
-            document.getElementById('topVisit').innerHTML = topVisit.map((item, i) => `
-                <div class="item-row">
-                    <div class="item-rank">
-                        <div class="rank-number">${i + 1}</div>
-                        <div class="item-name">${item.name.substring(0, 30)}...</div>
-                    </div>
-                    <div class="item-value">${item.visited.toLocaleString('pt-BR')}</div>
-                </div>
-            `).join('');
+            document.getElementById('insight-best').textContent = bestChannel ? `${bestChannel} (${bestRate.toFixed(1)}%)` : '-';
+            document.getElementById('insight-peak').textContent = peakMonth || '-';
+            document.getElementById('insight-engagement').textContent = avgEngagement + '%';
         }
 
-        // Update Data Table
-        function updateDataTable() {
-            const tbody = document.getElementById('dataTable');
-            tbody.innerHTML = filteredData.map(row => `
-                <tr>
-                    <td>${row['Content name'].substring(0, 25)}</td>
-                    <td>${row['Content type']}</td>
-                    <td>${row.Month}</td>
-                    <td>${(row['Planned, qty'] || 0).toLocaleString('pt-BR')}</td>
-                    <td>${(row['Sent, qty'] || 0).toLocaleString('pt-BR')}</td>
-                    <td>${(row['Delivered, qty'] || 0).toLocaleString('pt-BR')}</td>
-                    <td>${(row['Read, qty'] || 0).toLocaleString('pt-BR')}</td>
-                    <td>${(row['Visited, qty'] || 0).toLocaleString('pt-BR')}</td>
-                </tr>
-            `).join('');
-        }
-
-        // Update all
+        // Atualizar dashboard completo
         function updateDashboard() {
             updateKPIs();
+            updateTable();
             updateCharts();
-            updateTopItems();
-            updateDataTable();
+            updateInsights();
         }
 
-        // Export functions
-        function exportCSV() {
-            let csv = 'Content name,Content type,Month,Direction,Planned,Sent,Delivered,Read,Visited\n';
-            csv += filteredData.map(d => 
-                `"${d['Content name']}","${d['Content type']}","${d.Month}","${d.Direction}",${d['Planned, qty']},${d['Sent, qty']},${d['Delivered, qty']},${d['Read, qty']},${d['Visited, qty'] || 0}`
-            ).join('\n');
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'campaigns_analytics.csv';
-            a.click();
-            showMessage('✓ CSV exportado com sucesso!', 'success');
-        }
-
-        function exportJSON() {
-            const dataToExport = filteredData.map(d => ({
-                'Content name': d['Content name'],
-                'Content type': d['Content type'],
-                'Month': d.Month,
-                'Direction': d.Direction,
-                'Distribution name': d['Distribution name'],
-                'Planned': d['Planned, qty'],
-                'Sent': d['Sent, qty'],
-                'Delivered': d['Delivered, qty'],
-                'Read': d['Read, qty'],
-                'Visited': d['Visited, qty'] || 0
-            }));
-
-            const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'campaigns_analytics.json';
-            a.click();
-            showMessage('✓ JSON exportado com sucesso!', 'success');
-        }
-
-        function showMessage(msg, type) {
-            const messageArea = document.getElementById('messageArea');
-            const msgEl = document.createElement('div');
-            msgEl.className = type === 'success' ? 'success' : 'error';
-            msgEl.textContent = msg;
-            messageArea.innerHTML = '';
-            messageArea.appendChild(msgEl);
-            setTimeout(() => msgEl.remove(), 3000);
-        }
-
-        function toggleExportMenu() {
-            // Can be enhanced with a dropdown menu
-        }
-
-        // Initialize on page load
+        // Inicializar ao carregar
         document.addEventListener('DOMContentLoaded', () => {
-            initializeFilters();
             updateDashboard();
+
+            // Animação de entrada
+            const cards = document.querySelectorAll('.kpi-card, .chart-card, .insight-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 300ms ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
         });
     </script>
 </body>
 </html>
-
-
