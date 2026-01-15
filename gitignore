@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+.env
+.env.local
+
+# Vercel
+.vercel/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Campanhas - Q4 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #f1f5f9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #38bdf8;
+        }
+
+        header p {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #334155;
+            background: rgba(30, 41, 59, 0.8);
+            color: #f1f5f9;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 150ms ease;
+        }
+
+        .filter-btn:hover {
+            background: #334155;
+            border-color: #38bdf8;
+        }
+
+        .filter-btn.active {
+            background: #38bdf8;
+            color: #0f172a;
+            border-color: #38bdf8;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 200ms ease;
+        }
+
+        .kpi-card:hover {
+            border-color: #38bdf8;
+            box-shadow: 0 8px 16px rgba(56, 189, 248, 0.1);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 4px;
+        }
+
+        .kpi-change {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .chart-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart {
+            height: 300px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .bar-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 100%;
+            background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+            border-radius: 4px 4px 0 0;
+            min-height: 4px;
+            transition: all 150ms ease;
+            cursor: pointer;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .bar-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-align: center;
+            width: 100%;
+        }
+
+        .bar-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: #38bdf8;
+            text-align: center;
+        }
+
+        .funnel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .funnel-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .funnel-bar {
+            flex: 1;
+            height: 30px;
+            background: linear-gradient(90deg, #38bdf8 0%, #0284c7 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .funnel-label {
+            width: 80px;
+            font-size: 12px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        .table-container {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 16px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #f1f5f9;
+            letter-spacing: 0.5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: rgba(30, 41, 59, 0.5);
+            border-bottom: 1px solid #334155;
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-right: 1px solid #1e293b;
+        }
+
+        th:last-child {
+            border-right: none;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #334155;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        tbody tr:hover {
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .metric-cell {
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        .percentage-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .channel-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .channel-email {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .channel-whatsapp {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+
+        .summary-row {
+            background: rgba(56, 189, 248, 0.1);
+            font-weight: 600;
+            color: #38bdf8;
+        }
+
+        .legend {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #94a3b8;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .legend-email {
+            background: #3b82f6;
+        }
+
+        .legend-whatsapp {
+            background: #22c55e;
+        }
+
+        .insights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .insight-card {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 3px solid #38bdf8;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .insight-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #38bdf8;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .insight-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .insight-desc {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .chart {
+                height: 250px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart {
+                height: 200px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Dashboard de Campanhas Q4 2025</h1>
+            <p>Análise de desempenho de campanhas de outubro a dezembro - Natcofarma</p>
+        </header>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterByMonth('all')">Todos os Meses</button>
+            <button class="filter-btn" onclick="filterByMonth('October')">Outubro</button>
+            <button class="filter-btn" onclick="filterByMonth('November')">Novembro</button>
+            <button class="filter-btn" onclick="filterByMonth('December')">Dezembro</button>
+            <button class="filter-btn" onclick="filterByChannel('all')">Todos os Canais</button>
+            <button class="filter-btn" onclick="filterByChannel('email')">📧 Email</button>
+            <button class="filter-btn" onclick="filterByChannel('whatsapp')">💬 WhatsApp</button>
+        </div>
+
+        <div class="kpi-grid" id="kpiContainer">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Planejado</div>
+                <div class="kpi-value">79,986</div>
+                <div class="kpi-change">Contatos-alvo</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Enviado</div>
+                <div class="kpi-value">76,330</div>
+                <div class="kpi-change">95.4% do planejado</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Entregue</div>
+                <div class="kpi-value">63,115</div>
+                <div class="kpi-change">82.6% do enviado</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Lido</div>
+                <div class="kpi-value">18,192</div>
+                <div class="kpi-change">28.8% de engajamento</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Visitado</div>
+                <div class="kpi-value">1,932</div>
+                <div class="kpi-change">3.1% de conversão</div>
+            </div>
+        </div>
+
+        <div class="insights" id="insightsContainer">
+            <div class="insight-card">
+                <div class="insight-title">📈 Melhor Mês</div>
+                <div class="insight-value">Novembro</div>
+                <div class="insight-desc">46.99% de taxa de leitura</div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-title">📧 Canal Dominante</div>
+                <div class="insight-value">Email</div>
+                <div class="insight-desc">Maior volume e entrega consistente</div>
+            </div>
+            <div class="insight-card">
+                <div class="insight-title">🎯 Taxa de Entrega Média</div>
+                <div class="insight-value">82.6%</div>
+                <div class="insight-desc">Todas as campanhas</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-title">📊 Campanhas por Mês</div>
+                <div class="chart">
+                    <div class="bar-container">
+                        <div class="bar" style="height: 95%;"></div>
+                        <div class="bar-label">Outubro</div>
+                        <div class="bar-value">9.5K</div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar" style="height: 5%;"></div>
+                        <div class="bar-label">Novembro</div>
+                        <div class="bar-value">4.2K</div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar" style="height: 100%;"></div>
+                        <div class="bar-label">Dezembro</div>
+                        <div class="bar-value">66.3K</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">📞 Distribuição por Canal</div>
+                <div class="chart">
+                    <div class="bar-container">
+                        <div class="bar" style="height: 60%; background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);"></div>
+                        <div class="bar-label">Email</div>
+                        <div class="bar-value">58.2K</div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar" style="height: 40%; background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);"></div>
+                        <div class="bar-label">WhatsApp</div>
+                        <div class="bar-value">18.1K</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">🎯 Funil de Conversão (Global)</div>
+                <div class="funnel">
+                    <div class="funnel-step">
+                        <div class="funnel-label">Planejado</div>
+                        <div class="funnel-bar" style="width: 100%;">79,986 (100%)</div>
+                    </div>
+                    <div class="funnel-step">
+                        <div class="funnel-label">Enviado</div>
+                        <div class="funnel-bar" style="width: 95.4%;">76,330 (95.4%)</div>
+                    </div>
+                    <div class="funnel-step">
+                        <div class="funnel-label">Entregue</div>
+                        <div class="funnel-bar" style="width: 78.9%;">63,115 (78.9%)</div>
+                    </div>
+                    <div class="funnel-step">
+                        <div class="funnel-label">Lido</div>
+                        <div class="funnel-bar" style="width: 22.7%;">18,192 (22.7%)</div>
+                    </div>
+                    <div class="funnel-step">
+                        <div class="funnel-label">Visitado</div>
+                        <div class="funnel-bar" style="width: 2.4%;">1,932 (2.4%)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">Desempenho por Mês e Canal</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th>Canal</th>
+                        <th>Planejado</th>
+                        <th>Enviado</th>
+                        <th>Entregue</th>
+                        <th>Taxa Entrega</th>
+                        <th>Lido</th>
+                        <th>Taxa Leitura</th>
+                        <th>Visitado</th>
+                        <th>Taxa Visita</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Outubro</td>
+                        <td><span class="channel-badge channel-email">Email</span></td>
+                        <td>2,614</td>
+                        <td>2,533</td>
+                        <td>1,985</td>
+                        <td><span class="percentage-badge">78.4%</span></td>
+                        <td>707</td>
+                        <td><span class="percentage-badge">35.6%</span></td>
+                        <td>40</td>
+                        <td><span class="percentage-badge">2.0%</span></td>
+                    </tr>
+                    <tr>
+                        <td>Outubro</td>
+                        <td><span class="channel-badge channel-whatsapp">WhatsApp</span></td>
+                        <td>6,848</td>
+                        <td>6,267</td>
+                        <td>4,615</td>
+                        <td><span class="percentage-badge">73.7%</span></td>
+                        <td>1,885</td>
+                        <td><span class="percentage-badge">40.8%</span></td>
+                        <td>138</td>
+                        <td><span class="percentage-badge">3.0%</span></td>
+                    </tr>
+                    <tr>
+                        <td>Novembro</td>
+                        <td><span class="channel-badge channel-email">Email</span></td>
+                        <td>1,064</td>
+                        <td>1,029</td>
+                        <td>773</td>
+                        <td><span class="percentage-badge">75.1%</span></td>
+                        <td>319</td>
+                        <td><span class="percentage-badge">41.3%</span></td>
+                        <td>40</td>
+                        <td><span class="percentage-badge">5.2%</span></td>
+                    </tr>
+                    <tr>
+                        <td>Novembro</td>
+                        <td><span class="channel-badge channel-whatsapp">WhatsApp</span></td>
+                        <td>3,142</td>
+                        <td>3,083</td>
+                        <td>2,683</td>
+                        <td><span class="percentage-badge">87.0%</span></td>
+                        <td>1,305</td>
+                        <td><span class="percentage-badge">48.6%</span></td>
+                        <td>40</td>
+                        <td><span class="percentage-badge">1.5%</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dezembro</td>
+                        <td><span class="channel-badge channel-email">Email</span></td>
+                        <td>54,640</td>
+                        <td>52,856</td>
+                        <td>45,264</td>
+                        <td><span class="percentage-badge">85.6%</span></td>
+                        <td>12,166</td>
+                        <td><span class="percentage-badge">26.9%</span></td>
+                        <td>1,554</td>
+                        <td><span class="percentage-badge">3.4%</span></td>
+                    </tr>
+                    <tr>
+                        <td>Dezembro</td>
+                        <td><span class="channel-badge channel-whatsapp">WhatsApp</span></td>
+                        <td>11,678</td>
+                        <td>10,562</td>
+                        <td>7,758</td>
+                        <td><span class="percentage-badge">73.5%</span></td>
+                        <td>1,810</td>
+                        <td><span class="percentage-badge">23.3%</span></td>
+                        <td>120</td>
+                        <td><span class="percentage-badge">1.5%</span></td>
+                    </tr>
+                    <tr class="summary-row">
+                        <td colspan="2">TOTAL GERAL</td>
+                        <td>79,986</td>
+                        <td>76,330</td>
+                        <td>63,115</td>
+                        <td><span class="percentage-badge">82.6%</span></td>
+                        <td>18,192</td>
+                        <td><span class="percentage-badge">28.8%</span></td>
+                        <td>1,932</td>
+                        <td><span class="percentage-badge">3.1%</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 24px; padding: 16px; background: rgba(56, 189, 248, 0.1); border-radius: 8px; border-left: 3px solid #38bdf8;">
+            <p style="font-size: 13px; color: #cbd5e1; margin-bottom: 8px;">
+                <strong style="color: #38bdf8;">💡 Insights Principais:</strong>
+            </p>
+            <ul style="font-size: 13px; color: #cbd5e1; margin-left: 20px; line-height: 1.6;">
+                <li><strong>Desempenho por Mês:</strong> Novembro teve a melhor taxa de leitura (47%), enquanto dezembro teve o maior volume (66.3K planejados).</li>
+                <li><strong>Performance de Canais:</strong> Email apresenta melhor taxa de entrega (85.6% em dezembro), mas WhatsApp tem melhor engajamento de leitura no mês (48.6% em novembro).</li>
+                <li><strong>Funil de Conversão:</strong> Taxa de entrega (82.6%) é forte, porém apenas 28.8% leem, indicando oportunidade de otimização de conteúdo e horários de envio.</li>
+                <li><strong>Conversão Final:</strong> 3.1% de visitação em relação aos entregues sugere necessidade de melhorar chamadas para ação (CTA) e relevância das campanhas.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let currentFilter = { month: 'all', channel: 'all' };
+
+        function filterByMonth(month) {
+            currentFilter.month = month;
+            updateFilters();
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function filterByChannel(channel) {
+            currentFilter.channel = channel;
+            updateFilters();
+        }
+
+        function updateFilters() {
+            console.log('Filtros aplicados:', currentFilter);
+        }
+
+        // Animação ao carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.kpi-card, .chart-card, .insight-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 300ms ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        });
+    </script>
+</body>
+</html>
