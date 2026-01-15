@@ -42,9 +42,22 @@
 
         .filters {
             display: flex;
-            gap: 12px;
+            gap: 20px;
             margin-bottom: 24px;
             flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .filter-label {
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
 
         .filter-btn {
@@ -103,6 +116,7 @@
             font-weight: 700;
             color: #38bdf8;
             margin-bottom: 4px;
+            transition: all 300ms ease;
         }
 
         .kpi-change {
@@ -153,13 +167,21 @@
             background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
             border-radius: 4px 4px 0 0;
             min-height: 4px;
-            transition: all 150ms ease;
+            transition: all 300ms ease;
             cursor: pointer;
         }
 
         .bar:hover {
             opacity: 0.8;
             box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .bar.email {
+            background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .bar.whatsapp {
+            background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
         }
 
         .bar-label {
@@ -174,6 +196,7 @@
             font-weight: 600;
             color: #38bdf8;
             text-align: center;
+            transition: all 300ms ease;
         }
 
         .funnel {
@@ -199,6 +222,7 @@
             font-size: 12px;
             font-weight: 600;
             color: #0f172a;
+            transition: all 300ms ease;
         }
 
         .funnel-label {
@@ -260,11 +284,6 @@
             background: rgba(56, 189, 248, 0.05);
         }
 
-        .metric-cell {
-            color: #38bdf8;
-            font-weight: 600;
-        }
-
         .percentage-badge {
             display: inline-block;
             padding: 4px 8px;
@@ -298,35 +317,6 @@
             background: rgba(56, 189, 248, 0.1);
             font-weight: 600;
             color: #38bdf8;
-        }
-
-        .legend {
-            display: flex;
-            gap: 24px;
-            margin-top: 16px;
-            font-size: 12px;
-            color: #94a3b8;
-            flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-        }
-
-        .legend-email {
-            background: #3b82f6;
-        }
-
-        .legend-whatsapp {
-            background: #22c55e;
         }
 
         .insights {
@@ -417,44 +407,50 @@
         </header>
 
         <div class="filters">
-            <button class="filter-btn active" onclick="filterByMonth('all')">Todos os Meses</button>
-            <button class="filter-btn" onclick="filterByMonth('October')">Outubro</button>
-            <button class="filter-btn" onclick="filterByMonth('November')">Novembro</button>
-            <button class="filter-btn" onclick="filterByMonth('December')">Dezembro</button>
-            <button class="filter-btn" onclick="filterByChannel('all')">Todos os Canais</button>
-            <button class="filter-btn" onclick="filterByChannel('email')">📧 Email</button>
-            <button class="filter-btn" onclick="filterByChannel('whatsapp')">💬 WhatsApp</button>
+            <div class="filter-group">
+                <span class="filter-label">📅 Mês:</span>
+                <button class="filter-btn active" data-filter="month" data-value="all">Todos</button>
+                <button class="filter-btn" data-filter="month" data-value="October">Outubro</button>
+                <button class="filter-btn" data-filter="month" data-value="November">Novembro</button>
+                <button class="filter-btn" data-filter="month" data-value="December">Dezembro</button>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">📞 Canal:</span>
+                <button class="filter-btn active" data-filter="channel" data-value="all">Todos</button>
+                <button class="filter-btn" data-filter="channel" data-value="email">📧 Email</button>
+                <button class="filter-btn" data-filter="channel" data-value="whatsapp">💬 WhatsApp</button>
+            </div>
         </div>
 
         <div class="kpi-grid" id="kpiContainer">
             <div class="kpi-card">
                 <div class="kpi-label">Total Planejado</div>
-                <div class="kpi-value">79,986</div>
+                <div class="kpi-value" id="kpiPlanned">79,986</div>
                 <div class="kpi-change">Contatos-alvo</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Total Enviado</div>
-                <div class="kpi-value">76,330</div>
-                <div class="kpi-change">95.4% do planejado</div>
+                <div class="kpi-value" id="kpiSent">76,330</div>
+                <div class="kpi-change" id="kpiSentPct">95.4% do planejado</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Total Entregue</div>
-                <div class="kpi-value">63,115</div>
-                <div class="kpi-change">82.6% do enviado</div>
+                <div class="kpi-value" id="kpiDelivered">63,115</div>
+                <div class="kpi-change" id="kpiDeliveredPct">82.6% do enviado</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Total Lido</div>
-                <div class="kpi-value">18,192</div>
-                <div class="kpi-change">28.8% de engajamento</div>
+                <div class="kpi-value" id="kpiRead">18,192</div>
+                <div class="kpi-change" id="kpiReadPct">28.8% de engajamento</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Total Visitado</div>
-                <div class="kpi-value">1,932</div>
-                <div class="kpi-change">3.1% de conversão</div>
+                <div class="kpi-value" id="kpiVisited">1,932</div>
+                <div class="kpi-change" id="kpiVisitedPct">3.1% de conversão</div>
             </div>
         </div>
 
-        <div class="insights" id="insightsContainer">
+        <div class="insights">
             <div class="insight-card">
                 <div class="insight-title">📈 Melhor Mês</div>
                 <div class="insight-value">Novembro</div>
@@ -475,63 +471,63 @@
         <div class="charts-grid">
             <div class="chart-card">
                 <div class="chart-title">📊 Campanhas por Mês</div>
-                <div class="chart">
+                <div class="chart" id="monthChart">
                     <div class="bar-container">
-                        <div class="bar" style="height: 95%;"></div>
+                        <div class="bar" id="barOctober" style="height: 95%;"></div>
                         <div class="bar-label">Outubro</div>
-                        <div class="bar-value">9.5K</div>
+                        <div class="bar-value" id="valOctober">9.5K</div>
                     </div>
                     <div class="bar-container">
-                        <div class="bar" style="height: 5%;"></div>
+                        <div class="bar" id="barNovember" style="height: 5%;"></div>
                         <div class="bar-label">Novembro</div>
-                        <div class="bar-value">4.2K</div>
+                        <div class="bar-value" id="valNovember">4.2K</div>
                     </div>
                     <div class="bar-container">
-                        <div class="bar" style="height: 100%;"></div>
+                        <div class="bar" id="barDecember" style="height: 100%;"></div>
                         <div class="bar-label">Dezembro</div>
-                        <div class="bar-value">66.3K</div>
+                        <div class="bar-value" id="valDecember">66.3K</div>
                     </div>
                 </div>
             </div>
 
             <div class="chart-card">
                 <div class="chart-title">📞 Distribuição por Canal</div>
-                <div class="chart">
+                <div class="chart" id="channelChart">
                     <div class="bar-container">
-                        <div class="bar" style="height: 60%; background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);"></div>
+                        <div class="bar email" id="barEmail" style="height: 60%;"></div>
                         <div class="bar-label">Email</div>
-                        <div class="bar-value">58.2K</div>
+                        <div class="bar-value" id="valEmail">58.2K</div>
                     </div>
                     <div class="bar-container">
-                        <div class="bar" style="height: 40%; background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);"></div>
+                        <div class="bar whatsapp" id="barWhatsapp" style="height: 40%;"></div>
                         <div class="bar-label">WhatsApp</div>
-                        <div class="bar-value">18.1K</div>
+                        <div class="bar-value" id="valWhatsapp">18.1K</div>
                     </div>
                 </div>
             </div>
 
             <div class="chart-card">
-                <div class="chart-title">🎯 Funil de Conversão (Global)</div>
+                <div class="chart-title">🎯 Funil de Conversão</div>
                 <div class="funnel">
                     <div class="funnel-step">
                         <div class="funnel-label">Planejado</div>
-                        <div class="funnel-bar" style="width: 100%;">79,986 (100%)</div>
+                        <div class="funnel-bar" id="funnelPlanned" style="width: 100%;">79,986 (100%)</div>
                     </div>
                     <div class="funnel-step">
                         <div class="funnel-label">Enviado</div>
-                        <div class="funnel-bar" style="width: 95.4%;">76,330 (95.4%)</div>
+                        <div class="funnel-bar" id="funnelSent" style="width: 95.4%;">76,330 (95.4%)</div>
                     </div>
                     <div class="funnel-step">
                         <div class="funnel-label">Entregue</div>
-                        <div class="funnel-bar" style="width: 78.9%;">63,115 (78.9%)</div>
+                        <div class="funnel-bar" id="funnelDelivered" style="width: 78.9%;">63,115 (78.9%)</div>
                     </div>
                     <div class="funnel-step">
                         <div class="funnel-label">Lido</div>
-                        <div class="funnel-bar" style="width: 22.7%;">18,192 (22.7%)</div>
+                        <div class="funnel-bar" id="funnelRead" style="width: 22.7%;">18,192 (22.7%)</div>
                     </div>
                     <div class="funnel-step">
                         <div class="funnel-label">Visitado</div>
-                        <div class="funnel-bar" style="width: 2.4%;">1,932 (2.4%)</div>
+                        <div class="funnel-bar" id="funnelVisited" style="width: 2.4%;">1,932 (2.4%)</div>
                     </div>
                 </div>
             </div>
@@ -539,7 +535,7 @@
 
         <div class="table-container">
             <div class="table-header">Desempenho por Mês e Canal</div>
-            <table>
+            <table id="dataTable">
                 <thead>
                     <tr>
                         <th>Mês</th>
@@ -554,90 +550,7 @@
                         <th>Taxa Visita</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Outubro</td>
-                        <td><span class="channel-badge channel-email">Email</span></td>
-                        <td>2,614</td>
-                        <td>2,533</td>
-                        <td>1,985</td>
-                        <td><span class="percentage-badge">78.4%</span></td>
-                        <td>707</td>
-                        <td><span class="percentage-badge">35.6%</span></td>
-                        <td>40</td>
-                        <td><span class="percentage-badge">2.0%</span></td>
-                    </tr>
-                    <tr>
-                        <td>Outubro</td>
-                        <td><span class="channel-badge channel-whatsapp">WhatsApp</span></td>
-                        <td>6,848</td>
-                        <td>6,267</td>
-                        <td>4,615</td>
-                        <td><span class="percentage-badge">73.7%</span></td>
-                        <td>1,885</td>
-                        <td><span class="percentage-badge">40.8%</span></td>
-                        <td>138</td>
-                        <td><span class="percentage-badge">3.0%</span></td>
-                    </tr>
-                    <tr>
-                        <td>Novembro</td>
-                        <td><span class="channel-badge channel-email">Email</span></td>
-                        <td>1,064</td>
-                        <td>1,029</td>
-                        <td>773</td>
-                        <td><span class="percentage-badge">75.1%</span></td>
-                        <td>319</td>
-                        <td><span class="percentage-badge">41.3%</span></td>
-                        <td>40</td>
-                        <td><span class="percentage-badge">5.2%</span></td>
-                    </tr>
-                    <tr>
-                        <td>Novembro</td>
-                        <td><span class="channel-badge channel-whatsapp">WhatsApp</span></td>
-                        <td>3,142</td>
-                        <td>3,083</td>
-                        <td>2,683</td>
-                        <td><span class="percentage-badge">87.0%</span></td>
-                        <td>1,305</td>
-                        <td><span class="percentage-badge">48.6%</span></td>
-                        <td>40</td>
-                        <td><span class="percentage-badge">1.5%</span></td>
-                    </tr>
-                    <tr>
-                        <td>Dezembro</td>
-                        <td><span class="channel-badge channel-email">Email</span></td>
-                        <td>54,640</td>
-                        <td>52,856</td>
-                        <td>45,264</td>
-                        <td><span class="percentage-badge">85.6%</span></td>
-                        <td>12,166</td>
-                        <td><span class="percentage-badge">26.9%</span></td>
-                        <td>1,554</td>
-                        <td><span class="percentage-badge">3.4%</span></td>
-                    </tr>
-                    <tr>
-                        <td>Dezembro</td>
-                        <td><span class="channel-badge channel-whatsapp">WhatsApp</span></td>
-                        <td>11,678</td>
-                        <td>10,562</td>
-                        <td>7,758</td>
-                        <td><span class="percentage-badge">73.5%</span></td>
-                        <td>1,810</td>
-                        <td><span class="percentage-badge">23.3%</span></td>
-                        <td>120</td>
-                        <td><span class="percentage-badge">1.5%</span></td>
-                    </tr>
-                    <tr class="summary-row">
-                        <td colspan="2">TOTAL GERAL</td>
-                        <td>79,986</td>
-                        <td>76,330</td>
-                        <td>63,115</td>
-                        <td><span class="percentage-badge">82.6%</span></td>
-                        <td>18,192</td>
-                        <td><span class="percentage-badge">28.8%</span></td>
-                        <td>1,932</td>
-                        <td><span class="percentage-badge">3.1%</span></td>
-                    </tr>
+                <tbody id="tableBody">
                 </tbody>
             </table>
         </div>
@@ -648,34 +561,224 @@
             </p>
             <ul style="font-size: 13px; color: #cbd5e1; margin-left: 20px; line-height: 1.6;">
                 <li><strong>Desempenho por Mês:</strong> Novembro teve a melhor taxa de leitura (47%), enquanto dezembro teve o maior volume (66.3K planejados).</li>
-                <li><strong>Performance de Canais:</strong> Email apresenta melhor taxa de entrega (85.6% em dezembro), mas WhatsApp tem melhor engajamento de leitura no mês (48.6% em novembro).</li>
-                <li><strong>Funil de Conversão:</strong> Taxa de entrega (82.6%) é forte, porém apenas 28.8% leem, indicando oportunidade de otimização de conteúdo e horários de envio.</li>
-                <li><strong>Conversão Final:</strong> 3.1% de visitação em relação aos entregues sugere necessidade de melhorar chamadas para ação (CTA) e relevância das campanhas.</li>
+                <li><strong>Performance de Canais:</strong> Email apresenta melhor taxa de entrega (85.6% em dezembro), mas WhatsApp tem melhor engajamento de leitura (48.6% em novembro).</li>
+                <li><strong>Funil de Conversão:</strong> Taxa de entrega (82.6%) é forte, porém apenas 28.8% leem, indicando oportunidade de otimização de conteúdo.</li>
+                <li><strong>Conversão Final:</strong> 3.1% de visitação sugere necessidade de melhorar chamadas para ação (CTA).</li>
             </ul>
         </div>
     </div>
 
     <script>
-        let currentFilter = { month: 'all', channel: 'all' };
+        // Dados das campanhas
+        const campaignData = [
+            { month: 'October', channel: 'email', planned: 2614, sent: 2533, delivered: 1985, read: 707, visited: 40 },
+            { month: 'October', channel: 'whatsapp', planned: 6848, sent: 6267, delivered: 4615, read: 1885, visited: 138 },
+            { month: 'November', channel: 'email', planned: 1064, sent: 1029, delivered: 773, read: 319, visited: 40 },
+            { month: 'November', channel: 'whatsapp', planned: 3142, sent: 3083, delivered: 2683, read: 1305, visited: 40 },
+            { month: 'December', channel: 'email', planned: 54640, sent: 52856, delivered: 45264, read: 12166, visited: 1554 },
+            { month: 'December', channel: 'whatsapp', planned: 11678, sent: 10562, delivered: 7758, read: 1810, visited: 120 }
+        ];
 
-        function filterByMonth(month) {
-            currentFilter.month = month;
-            updateFilters();
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        let filters = { month: 'all', channel: 'all' };
+
+        // Calcula totais por mês e canal
+        function calculateChartData() {
+            const monthTotals = {};
+            const channelTotals = { email: 0, whatsapp: 0 };
+
+            campaignData.forEach(row => {
+                const monthMatch = filters.month === 'all' || row.month === filters.month;
+                const channelMatch = filters.channel === 'all' || row.channel === filters.channel;
+
+                if (monthMatch && channelMatch) {
+                    monthTotals[row.month] = (monthTotals[row.month] || 0) + row.planned;
+                    channelTotals[row.channel] += row.planned;
+                }
+            });
+
+            return { monthTotals, channelTotals };
         }
 
-        function filterByChannel(channel) {
-            currentFilter.channel = channel;
-            updateFilters();
+        // Atualizar gráficos
+        function updateCharts() {
+            const { monthTotals, channelTotals } = calculateChartData();
+            
+            // Encontrar o máximo para proporção
+            const allMonths = [monthTotals['October'] || 0, monthTotals['November'] || 0, monthTotals['December'] || 0];
+            const maxMonth = Math.max(...allMonths, 1);
+            const maxChannel = Math.max(channelTotals.email, channelTotals.whatsapp, 1);
+
+            // Atualizar barras de mês
+            const octHeight = ((monthTotals['October'] || 0) / maxMonth) * 100;
+            const novHeight = ((monthTotals['November'] || 0) / maxMonth) * 100;
+            const decHeight = ((monthTotals['December'] || 0) / maxMonth) * 100;
+
+            document.getElementById('barOctober').style.height = octHeight + '%';
+            document.getElementById('barNovember').style.height = novHeight + '%';
+            document.getElementById('barDecember').style.height = decHeight + '%';
+
+            document.getElementById('valOctober').textContent = formatNumber(monthTotals['October'] || 0);
+            document.getElementById('valNovember').textContent = formatNumber(monthTotals['November'] || 0);
+            document.getElementById('valDecember').textContent = formatNumber(monthTotals['December'] || 0);
+
+            // Atualizar barras de canal
+            const emailHeight = (channelTotals.email / maxChannel) * 100;
+            const whatsappHeight = (channelTotals.whatsapp / maxChannel) * 100;
+
+            document.getElementById('barEmail').style.height = emailHeight + '%';
+            document.getElementById('barWhatsapp').style.height = whatsappHeight + '%';
+
+            document.getElementById('valEmail').textContent = formatNumber(channelTotals.email);
+            document.getElementById('valWhatsapp').textContent = formatNumber(channelTotals.whatsapp);
         }
 
-        function updateFilters() {
-            console.log('Filtros aplicados:', currentFilter);
+        // Formatar números em K
+        function formatNumber(num) {
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
         }
 
-        // Animação ao carregar
+        // Popula tabela
+        function populateTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            let totals = { planned: 0, sent: 0, delivered: 0, read: 0, visited: 0 };
+
+            campaignData.forEach(row => {
+                const monthMatch = filters.month === 'all' || row.month === filters.month;
+                const channelMatch = filters.channel === 'all' || row.channel === filters.channel;
+
+                if (monthMatch && channelMatch) {
+                    const sentPct = ((row.sent / row.planned) * 100).toFixed(1);
+                    const deliveredPct = ((row.delivered / row.sent) * 100).toFixed(1);
+                    const readPct = ((row.read / row.delivered) * 100).toFixed(1);
+                    const visitedPct = ((row.visited / row.delivered) * 100).toFixed(1);
+
+                    const tr = document.createElement('tr');
+                    const monthName = row.month === 'October' ? 'Outubro' : row.month === 'November' ? 'Novembro' : 'Dezembro';
+                    const channelBadge = row.channel === 'email' 
+                        ? '<span class="channel-badge channel-email">📧 Email</span>'
+                        : '<span class="channel-badge channel-whatsapp">💬 WhatsApp</span>';
+
+                    tr.innerHTML = `
+                        <td>${monthName}</td>
+                        <td>${channelBadge}</td>
+                        <td>${row.planned.toLocaleString('pt-BR')}</td>
+                        <td>${row.sent.toLocaleString('pt-BR')}</td>
+                        <td>${row.delivered.toLocaleString('pt-BR')}</td>
+                        <td><span class="percentage-badge">${deliveredPct}%</span></td>
+                        <td>${row.read.toLocaleString('pt-BR')}</td>
+                        <td><span class="percentage-badge">${readPct}%</span></td>
+                        <td>${row.visited.toLocaleString('pt-BR')}</td>
+                        <td><span class="percentage-badge">${visitedPct}%</span></td>
+                    `;
+                    tbody.appendChild(tr);
+
+                    totals.planned += row.planned;
+                    totals.sent += row.sent;
+                    totals.delivered += row.delivered;
+                    totals.read += row.read;
+                    totals.visited += row.visited;
+                }
+            });
+
+            // Adicionar linha de totais
+            if (totals.planned > 0) {
+                const totalRow = document.createElement('tr');
+                totalRow.className = 'summary-row';
+                const totalSentPct = ((totals.sent / totals.planned) * 100).toFixed(1);
+                const totalDeliveredPct = ((totals.delivered / totals.sent) * 100).toFixed(1);
+                const totalReadPct = ((totals.read / totals.delivered) * 100).toFixed(1);
+                const totalVisitedPct = ((totals.visited / totals.delivered) * 100).toFixed(1);
+
+                totalRow.innerHTML = `
+                    <td colspan="2">TOTAL FILTRADO</td>
+                    <td>${totals.planned.toLocaleString('pt-BR')}</td>
+                    <td>${totals.sent.toLocaleString('pt-BR')}</td>
+                    <td>${totals.delivered.toLocaleString('pt-BR')}</td>
+                    <td><span class="percentage-badge">${totalDeliveredPct}%</span></td>
+                    <td>${totals.read.toLocaleString('pt-BR')}</td>
+                    <td><span class="percentage-badge">${totalReadPct}%</span></td>
+                    <td>${totals.visited.toLocaleString('pt-BR')}</td>
+                    <td><span class="percentage-badge">${totalVisitedPct}%</span></td>
+                `;
+                tbody.appendChild(totalRow);
+            }
+
+            updateKPIs(totals);
+        }
+
+        // Atualizar KPIs
+        function updateKPIs(totals) {
+            document.getElementById('kpiPlanned').textContent = totals.planned.toLocaleString('pt-BR');
+            document.getElementById('kpiSent').textContent = totals.sent.toLocaleString('pt-BR');
+            document.getElementById('kpiDelivered').textContent = totals.delivered.toLocaleString('pt-BR');
+            document.getElementById('kpiRead').textContent = totals.read.toLocaleString('pt-BR');
+            document.getElementById('kpiVisited').textContent = totals.visited.toLocaleString('pt-BR');
+
+            const sentPct = totals.planned > 0 ? ((totals.sent / totals.planned) * 100).toFixed(1) : 0;
+            const deliveredPct = totals.sent > 0 ? ((totals.delivered / totals.sent) * 100).toFixed(1) : 0;
+            const readPct = totals.delivered > 0 ? ((totals.read / totals.delivered) * 100).toFixed(1) : 0;
+            const visitedPct = totals.delivered > 0 ? ((totals.visited / totals.delivered) * 100).toFixed(1) : 0;
+
+            document.getElementById('kpiSentPct').textContent = `${sentPct}% do planejado`;
+            document.getElementById('kpiDeliveredPct').textContent = `${deliveredPct}% do enviado`;
+            document.getElementById('kpiReadPct').textContent = `${readPct}% de engajamento`;
+            document.getElementById('kpiVisitedPct').textContent = `${visitedPct}% de conversão`;
+
+            // Atualizar funil
+            const totalPlanned = totals.planned || 1;
+            document.getElementById('funnelPlanned').style.width = '100%';
+            document.getElementById('funnelPlanned').textContent = `${totals.planned.toLocaleString('pt-BR')} (100%)`;
+            
+            const sentWidth = (sentPct);
+            document.getElementById('funnelSent').style.width = sentWidth + '%';
+            document.getElementById('funnelSent').textContent = `${totals.sent.toLocaleString('pt-BR')} (${sentPct}%)`;
+            
+            const delWidth = (sentPct * (deliveredPct / 100));
+            document.getElementById('funnelDelivered').style.width = delWidth + '%';
+            document.getElementById('funnelDelivered').textContent = `${totals.delivered.toLocaleString('pt-BR')} (${((totals.delivered/totals.planned)*100).toFixed(1)}%)`;
+            
+            const readWidth = (sentPct * (deliveredPct / 100) * (readPct / 100));
+            document.getElementById('funnelRead').style.width = readWidth + '%';
+            document.getElementById('funnelRead').textContent = `${totals.read.toLocaleString('pt-BR')} (${((totals.read/totals.planned)*100).toFixed(1)}%)`;
+            
+            const visWidth = (sentPct * (deliveredPct / 100) * (readPct / 100) * (visitedPct / 100));
+            document.getElementById('funnelVisited').style.width = visWidth + '%';
+            document.getElementById('funnelVisited').textContent = `${totals.visited.toLocaleString('pt-BR')} (${((totals.visited/totals.planned)*100).toFixed(1)}%)`;
+        }
+
+        // Configurar botões de filtro
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filterType = this.dataset.filter;
+                const filterValue = this.dataset.value;
+
+                // Remover ativo do mesmo grupo
+                document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach(b => {
+                    b.classList.remove('active');
+                });
+
+                // Adicionar ativo ao clicado
+                this.classList.add('active');
+
+                // Atualizar filtro
+                filters[filterType] = filterValue;
+
+                // Recarregar tudo
+                populateTable();
+                updateCharts();
+            });
+        });
+
+        // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
+            populateTable();
+            updateCharts();
+
+            // Animação ao carregar
             const cards = document.querySelectorAll('.kpi-card, .chart-card, .insight-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
